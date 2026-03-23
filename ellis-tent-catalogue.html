@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ellis Canvas Tents — Interior Configuration Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --site-bg:#F1EBE2;--site-fg:#6D5134;--site-muted:#8a6b4a;--site-rule:rgba(109,81,52,.12);
+  --cover:#4a3928;--cover-dk:#352a1c;--spine:#5c4a36;
+  --page:#ede4d3;--page-dk:#d6c8ad;--foxing:rgba(160,120,70,.12);
+  --ink:#6D5134;--ink-med:rgba(109,81,52,.6);--ink-light:rgba(109,81,52,.32);--ink-ghost:rgba(109,81,52,.14);
+  --hdr-h:auto;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--site-bg);color:var(--site-fg);font-family:'Cormorant Garamond',Georgia,serif;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+/* ── STICKY HEADER ── */
+.site-hdr{flex-shrink:0;text-align:center;padding:14px 24px 0;background:var(--site-bg);border-bottom:1px solid var(--site-rule);z-index:100}
+.site-hdr h1{font-weight:400;font-size:13px;letter-spacing:5px;text-transform:uppercase;color:var(--site-fg);opacity:.55;margin-bottom:2px}
+.site-hdr .title{font-weight:700;font-size:clamp(20px,2.8vw,28px);color:var(--site-fg);letter-spacing:.5px;margin-top:0;line-height:1.15}
+.ctrl-strip{display:flex;justify-content:center;align-items:center;gap:2px;padding:10px 8px 0;flex-wrap:wrap}
+.nav-btn{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--site-muted);padding:3px 14px 6px;cursor:pointer;transition:all .3s}
+.nav-btn:hover{color:var(--site-fg)}.nav-btn.on{color:var(--site-fg);border-bottom-color:var(--site-fg)}
+.ctrl-div{width:1px;height:16px;background:var(--site-rule);margin:0 6px}
+.sz-btn{font-family:'Special Elite',monospace;font-size:12px;background:none;border:none;color:var(--site-muted);padding:3px 9px;cursor:pointer;transition:all .25s;border-radius:2px}
+.sz-btn:hover{color:var(--site-fg)}.sz-btn.on{color:var(--site-fg);background:rgba(0,0,0,.06)}
+
+/* ── MAIN TWO-PANEL ── */
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;min-height:0}
+
+/* ── LEFT: DRAWING ── */
+.panel-draw{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px;overflow:hidden}
+.plate-wrap{background:var(--page);border-radius:4px;
+  box-shadow:0 2px 16px rgba(0,0,0,.1);overflow:hidden;position:relative;width:100%;max-width:640px}
+.plate-wrap::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:none}
+.plate-inner{position:relative;padding:12px 16px 8px 16px}
+.plate-inner::before{display:none}
+.plate{position:relative;z-index:3;border:1px solid rgba(44,32,21,.12);padding:2px;background:rgba(255,252,245,.4)}
+.plate::before{content:'';position:absolute;inset:3px;border:1px solid rgba(44,32,21,.06);pointer-events:none;z-index:5}
+.plate canvas{display:block;width:100%;height:auto}
+.opt-bar{display:flex;justify-content:center;gap:5px;padding:2px 4px 8px;flex-wrap:wrap;position:relative;z-index:3}
+.opt-btn{font-family:'Special Elite',monospace;font-size:12px;background:none;border:1px solid var(--ink-ghost);color:var(--site-muted);padding:4px 14px;cursor:pointer;transition:all .2s;border-radius:2px}
+.opt-btn:hover{color:var(--site-fg);border-color:var(--ink-light)}
+.opt-btn.on{color:var(--site-fg);border-color:rgba(109,81,52,.4);background:rgba(109,81,52,.06)}
+
+/* ── RIGHT: SPECS (scrollable) ── */
+.panel-specs{overflow-y:auto;padding:24px 36px 40px 32px;border-left:1px solid var(--site-rule)}
+/* ── SPECS PANEL: ANNOTATION BLOCK ── */
+.annot{padding:0 4px 14px}
+.annot h3{font-weight:700;font-size:30px;letter-spacing:.5px;color:var(--ink);margin-bottom:5px;line-height:1.15}
+.annot p{font-family:'IM Fell English',serif;font-style:italic;font-size:18px;color:var(--ink-med);line-height:1.6;max-width:480px}
+.badge-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:'Special Elite',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 9px;border-radius:1px}
+.badge::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%}
+.badge-y{color:var(--ink);border:1px solid var(--ink-light);background:rgba(44,32,21,.03)}.badge-y::before{background:var(--ink)}
+.badge-n{color:var(--ink-light);border:1px solid var(--ink-ghost)}.badge-n::before{background:var(--ink-ghost)}
+.specs-rule{height:1px;background:var(--ink-ghost);margin:0 0 12px}
+
+/* ── SPECS PANEL: SECTIONS ── */
+.spec-section{margin-bottom:16px}
+.spec-hdr{display:flex;align-items:center;gap:8px;padding:0 0 7px;margin-bottom:2px;border-bottom:1px solid var(--ink-light)}
+.spec-hdr-text{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:17px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink)}
+.spec-hdr-rule{flex:1;height:1px;background:transparent}
+
+/* ── SPECS PANEL: SHACKLETON DUAL-COL ── */
+.spec-cols{display:grid;grid-template-columns:1fr 1fr;margin-bottom:4px}
+.spec-col{padding:6px 10px 8px}
+.spec-col:first-child{border-right:1px solid var(--ink-ghost)}
+.spec-col .col-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid var(--ink-ghost)}
+.spec-col .sl{display:flex;justify-content:space-between;align-items:baseline;padding:2px 0;border-bottom:1px solid rgba(44,32,21,.04)}
+.spec-col .sl:last-child{border-bottom:none}
+.spec-col .sl .k{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:rgba(109,81,52,.62)}
+.spec-col .sl .v{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ink);text-align:right;font-weight:600}
+
+/* ── SPECS PANEL: GEAR ROWS ── */
+.gear-item{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-bottom:1px solid rgba(109,81,52,.06)}
+.gear-item:last-child{border-bottom:none}
+.gear-item .k{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:rgba(44,32,21,.62);flex-shrink:0}
+.gear-item .v{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ink);text-align:right;font-weight:600;padding-left:16px}
+
+/* ── SPECS PANEL: TAGLINE ── */
+.tagline{margin-top:18px;padding:14px 0 0;border-top:1px solid var(--ink-ghost);font-family:'IM Fell English',serif;font-style:italic;font-size:17px;color:var(--ink-med);line-height:1.65;text-align:center}
+.book-ftr{text-align:center;padding:12px 0;border-top:1px solid var(--ink-ghost);margin-top:8px}
+.book-ftr p{font-family:'Special Elite',monospace;font-size:9px;letter-spacing:3px;color:var(--ink-light);text-transform:uppercase}
+
+/* ── MOBILE (<960px) ── */
+@media(max-width:960px){
+  html,body{height:auto;overflow:auto}
+  body{display:block}
+  .main{display:block;overflow:visible}
+  .panel-draw{padding:8px 12px}
+  .plate-wrap{max-width:500px;margin:0 auto}
+  .panel-specs{border-left:none;padding:12px 16px 48px;overflow-y:visible}
+}
+@media(max-width:600px){
+  .site-hdr{padding:8px 12px 6px}
+  .site-hdr h1{font-size:9px;letter-spacing:4px}
+  .site-hdr .title{font-size:16px}
+  .ctrl-strip{gap:2px;padding:4px 4px 0}
+  .nav-btn{font-size:10px;padding:2px 6px 3px;letter-spacing:1px}
+  .sz-btn{font-size:10px;padding:2px 5px}
+  .ctrl-div{height:10px;margin:0 2px}
+  .plate-inner{padding:8px 10px 6px 14px}
+  .opt-btn{font-size:10px;padding:3px 8px}
+  .spec-cols{grid-template-columns:1fr}
+  .spec-col:first-child{border-right:none;border-bottom:1px solid var(--ink-ghost)}
+}
+</style>
+</head>
+<body>
+<header class="site-hdr">
+  <div class="title">Interior Configuration Guide</div>
+  <div class="ctrl-strip">
+    <span id="LN"></span>
+    <span class="ctrl-div"></span>
+    <span id="SN"></span>
+  </div>
+</header>
+<div class="main">
+  <div class="panel-draw">
+    <div class="plate-wrap"><div class="plate-inner">
+      <div class="opt-bar" id="ON"></div>
+      <div class="plate"><canvas id="C" width="1460" height="1460"></canvas></div>
+    </div></div>
+  </div>
+  <div class="panel-specs">
+    <div class="annot" id="DSC"></div>
+    <div class="specs-rule"></div>
+    <div class="specs" id="SPC"></div>
+    <div class="book-ftr"><p>Ellis Canvas Tents &middot; Durango, Colorado</p></div>
+  </div>
+</div>
+
+<script>
+const CW=1460,ink='#5c5045',inkL='rgba(72,60,48,0.22)',inkM='rgba(72,60,48,0.4)',
+inkFl='rgba(160,130,75,0.04)',cotFl='rgba(160,130,75,0.08)',stvFl='rgba(110,75,35,0.14)',
+brFl='rgba(130,100,50,0.07)',brSt='rgba(72,60,48,0.4)',furFl='rgba(140,110,55,0.06)',
+awnFl='rgba(160,130,75,0.03)',DA=1050,PG='#ece3d0';
+
+function mkCtx(){
+  const c=document.getElementById('C'),dpr=Math.min(window.devicePixelRatio||1,3);
+  c.width=CW*dpr;c.height=CW*dpr;
+  const x=c.getContext('2d');
+  x.fillStyle=PG;x.fillRect(0,0,CW*dpr,CW*dpr);
+  const id=x.getImageData(0,0,CW*dpr,CW*dpr);
+  for(let k=0;k<id.data.length;k+=4){const n=(Math.random()-.5)*12;id.data[k]+=n;id.data[k+1]+=n;id.data[k+2]+=n}
+  x.putImageData(id,0,0);
+  x.scale(dpr,dpr);
+  const vg=x.createRadialGradient(CW/2,CW/2,180,CW/2,CW/2,CW/2);
+  vg.addColorStop(0,'rgba(232,220,198,0)');vg.addColorStop(1,'rgba(120,95,55,0.07)');
+  x.fillStyle=vg;x.fillRect(0,0,CW,CW);x.lineCap='round';x.lineJoin='round';return x;
+}
+
+function hl(x,x1,y1,x2,y2,c,w){x.strokeStyle=c||ink;x.lineWidth=w||2;x.beginPath();const s=14;for(let i=0;i<=s;i++){const t=i/s;const jx=(Math.random()-.5)*1.2;const jy=(Math.random()-.5)*1.2;const px=x1+(x2-x1)*t+jx;const py=y1+(y2-y1)*t+jy;i===0?x.moveTo(px,py):x.lineTo(px,py)}x.stroke()}
+function hr(x,px,py,w,h,c,lw){hl(x,px,py,px+w,py,c,lw);hl(x,px+w,py,px+w,py+h,c,lw);hl(x,px+w,py+h,px,py+h,c,lw);hl(x,px,py+h,px,py,c,lw)}
+function dl(x,x1,y1,x2,y2,c,w){x.strokeStyle=c||inkL;x.lineWidth=w||1.1;x.setLineDash([7,5]);x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();x.setLineDash([])}
+function dimH(x,x1,x2,y,l){x.strokeStyle=inkM;x.lineWidth=.9;hl(x,x1,y-7,x1,y+7,inkM,.8);hl(x,x2,y-7,x2,y+7,inkM,.8);hl(x,x1+2,y,x2-2,y,inkM,.8);x.font='11px "Special Elite",monospace';const m=(x1+x2)/2;x.fillStyle=ink;x.textAlign='center';x.fillText(l,m,y+3)}
+function dimV(x,px,y1,y2,l){x.strokeStyle=inkM;x.lineWidth=.9;hl(x,px-7,y1,px+7,y1,inkM,.8);hl(x,px-7,y2,px+7,y2,inkM,.8);hl(x,px,y1+2,px,y2-2,inkM,.8);x.save();x.translate(px,(y1+y2)/2);x.rotate(-Math.PI/2);x.font='11px "Special Elite",monospace';x.fillStyle=ink;x.textAlign='center';x.fillText(l,0,3);x.restore()}
+
+function drawCot(x,px,py,w,h,lr,lt){
+  x.fillStyle=cotFl;x.fillRect(px,py,w,h);hr(x,px,py,w,h,ink,1.8);
+  hl(x,px,py,px+w,py+h,inkL,.6);hl(x,px+w,py,px,py+h,inkL,.6);
+  if(w<h)hl(x,px,py+h/2,px+w,py+h/2,inkM,.9);else hl(x,px+w/2,py,px+w/2,py+h,inkM,.9);
+
+  x.save();x.translate(px+w/2,py+h/2);x.rotate(lr);
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';
+  x.fillText(lt||'HERITAGE COT',0,-4);
+  x.restore();
+}
+
+function drawQueen(x,px,py,w,h,lr){
+  // Fill + border
+  x.fillStyle=cotFl;x.fillRect(px,py,w,h);hr(x,px,py,w,h,ink,1.8);
+  // Ticking lines across the width
+  x.strokeStyle='rgba(44,32,21,0.07)';x.lineWidth=.5;
+  const tickDir=w>h;
+
+  // Pillow — short end, two side-by-side rectangles
+  const pL=Math.min(w,h)*.14,pW=(Math.max(w,h)*.44);
+  x.fillStyle='rgba(160,130,75,0.06)';x.strokeStyle=inkM;x.lineWidth=.9;
+  if(h>w){
+    // vertical — pillows at top
+    x.fillRect(px+4,py+4,w/2-6,pL);x.strokeRect(px+4,py+4,w/2-6,pL);
+    x.fillRect(px+w/2+2,py+4,w/2-6,pL);x.strokeRect(px+w/2+2,py+4,w/2-6,pL);
+  } else {
+    // horizontal — pillows at left
+    x.fillRect(px+4,py+4,pL,h/2-6);x.strokeRect(px+4,py+4,pL,h/2-6);
+    x.fillRect(px+4,py+h/2+2,pL,h/2-6);x.strokeRect(px+4,py+h/2+2,pL,h/2-6);
+  }
+  // Label
+  x.save();x.translate(px+w/2,py+h/2);x.rotate(lr||0);
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';
+  x.fillText('QUEEN MATTRESS',0,-4);
+  x.restore();
+}
+
+
+function drawBR(x,px,py,w,h,ps,lr){
+  x.fillStyle=brFl;x.fillRect(px,py,w,h);hr(x,px,py,w,h,brSt,1.6);
+  x.strokeStyle='rgba(44,32,21,0.1)';x.lineWidth=.5;
+
+  const vW=Math.min(w,h)*.16;x.strokeStyle=inkM;x.lineWidth=1;x.setLineDash([3,2]);
+  if(ps==='left')x.strokeRect(px,py+3,vW,h-6);else if(ps==='right')x.strokeRect(px+w-vW,py+3,vW,h-6);
+  else if(ps==='top')x.strokeRect(px+3,py,w-6,vW);else x.strokeRect(px+3,py+h-vW,w-6,vW);
+  x.setLineDash([]);
+  const pS=Math.min(w,h)*.22;x.fillStyle='rgba(160,130,75,0.03)';x.strokeStyle='rgba(72,60,48,0.15)';x.lineWidth=.8;
+  if(ps==='left'){x.fillRect(px+3,py+3,pS,h-6);x.strokeRect(px+3,py+3,pS,h-6)}
+  else if(ps==='right'){x.fillRect(px+w-3-pS,py+3,pS,h-6);x.strokeRect(px+w-3-pS,py+3,pS,h-6)}
+  else if(ps==='top'){x.fillRect(px+3,py+3,w-6,pS);x.strokeRect(px+3,py+3,w-6,pS)}
+  else{x.fillRect(px+3,py+h-3-pS,w-6,pS);x.strokeRect(px+3,py+h-3-pS,w-6,pS)}
+  x.save();x.translate(px+w/2,py+h/2);x.rotate(lr);
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';
+  x.fillText('COWBOY BEDROLL \u2014 34\u2033',0,0);x.restore();
+}
+
+function drawChairS(x,cx,cy,rot,s){
+  const cw=23*s,cd=27*s;x.save();x.translate(cx,cy);x.rotate(rot||0);
+  x.fillStyle=furFl;x.beginPath();x.ellipse(0,0,cw/2,cd/2,0,0,Math.PI*2);x.fill();
+  x.strokeStyle=inkM;x.lineWidth=1.2;x.beginPath();x.ellipse(0,0,cw/2,cd/2,0,0,Math.PI*2);x.stroke();
+  hl(x,-cw/2+4,-cd/2+4,cw/2-4,cd/2-4,'rgba(44,32,21,0.15)',.6);hl(x,cw/2-4,-cd/2+4,-cw/2+4,cd/2-4,'rgba(44,32,21,0.15)',.6);
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('BUTTERFLY',0,-2);x.fillText('CHAIR',0,8);x.restore();
+}
+
+function drawTable(x,cx,cy,w,h,label,dim,isRoll){
+  const px=cx-w/2,py=cy-h/2;x.fillStyle=furFl;x.fillRect(px,py,w,h);hr(x,px,py,w,h,ink,isRoll?1.5:1.3);
+  x.strokeStyle=isRoll?'rgba(44,32,21,0.1)':'rgba(44,32,21,0.06)';x.lineWidth=isRoll?.5:.4;
+
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';
+  x.fillText(label||'PANGEAN',cx,cy-3);x.fillText('TABLE',cx,cy+7);
+  
+}
+
+// ═══════ BASE RENDERERS ═══════
+function drawShackletonBase(x,FLOOR,PEAK,CH,JH,doorW,cO,winW,sL,sW,fL,fW,dimLabel){
+  const s=DA/FLOOR,i2p=v=>v*s,m=(CW-DA)/2,tx=m,ty=m,tw=DA,th=DA;
+  x.fillStyle=inkFl;x.fillRect(tx,ty,tw,th);hr(x,tx,ty,tw,th,ink,3);
+  [[tx,ty],[tx+tw,ty],[tx+tw,ty+th],[tx,ty+th]].forEach(([cx,cy])=>{x.strokeStyle=inkM;x.lineWidth=1.3;x.beginPath();x.arc(cx,cy,10,0,Math.PI*2);x.stroke();hl(x,cx-4,cy,cx+4,cy,inkM,.8);hl(x,cx,cy-4,cx,cy+4,inkM,.8)});
+  const bo=i2p(6);x.strokeStyle=inkL;x.lineWidth=1;x.setLineDash([5,4]);x.strokeRect(tx+bo,ty+bo,tw-bo*2,th-bo*2);x.setLineDash([]);
+  // Front wall — door on right, inner edge at center pole axis
+  const fDW=tw*0.3125,fDL=tx+tw/2,fDR=fDL+fDW;
+  hl(x,fDL,ty,fDR,ty,'rgba(232,220,198,0.9)',4);
+  x.strokeStyle=ink;x.lineWidth=1.8;x.beginPath();x.moveTo(fDL,ty);x.lineTo(fDL-12,ty-22);x.stroke();x.beginPath();x.moveTo(fDR,ty);x.lineTo(fDR+12,ty-22);x.stroke();
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('FRONT DOOR',(fDL+fDR)/2,ty-30);
+  const fWW=tw*0.229,fWCX=tx+tw/4;
+  x.strokeStyle=inkM;x.lineWidth=1.3;x.beginPath();x.moveTo(fWCX-fWW/2,ty);x.lineTo(fWCX-fWW/2,ty-10);x.stroke();x.beginPath();x.moveTo(fWCX+fWW/2,ty);x.lineTo(fWCX+fWW/2,ty-10);x.stroke();
+  hl(x,fWCX-fWW/2,ty,fWCX+fWW/2,ty,inkL,1.5);
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('WINDOW',fWCX,ty-30);
+  // Rear wall — door on left (mirrored), inner edge at center pole axis
+  const rdy=ty+th,rDR2=tx+tw/2,rDL2=rDR2-fDW;
+  hl(x,rDL2,rdy,rDR2,rdy,'rgba(232,220,198,0.9)',4);
+  x.strokeStyle=ink;x.lineWidth=1.8;x.beginPath();x.moveTo(rDL2,rdy);x.lineTo(rDL2-12,rdy+22);x.stroke();x.beginPath();x.moveTo(rDR2,rdy);x.lineTo(rDR2+12,rdy+22);x.stroke();
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('REAR DOOR',(rDL2+rDR2)/2,rdy+38);
+  const rWCX=tx+tw*3/4;x.strokeStyle=inkM;x.lineWidth=1.3;
+  x.beginPath();x.moveTo(rWCX-fWW/2,rdy);x.lineTo(rWCX-fWW/2,rdy+10);x.stroke();x.beginPath();x.moveTo(rWCX+fWW/2,rdy);x.lineTo(rWCX+fWW/2,rdy+10);x.stroke();
+  hl(x,rWCX-fWW/2,rdy,rWCX+fWW/2,rdy,inkL,1.5);x.fillText('WINDOW',rWCX,rdy+38);
+  // Guy lines
+  [[tx,ty,-1,-1],[tx+tw,ty,1,-1],[tx+tw,ty+th,1,1],[tx,ty+th,-1,1]].forEach(([gx,gy,dx,dy])=>{const gl=38,ex=gx+dx*gl*.707,ey=gy+dy*gl*.707;dl(x,gx,gy,ex,ey,inkL,1);x.fillStyle=inkM;x.beginPath();x.arc(ex,ey,3.5,0,Math.PI*2);x.fill()});
+  // Center pole
+  const cpx=tx+tw/2,cpy=ty+th/2;
+  dl(x,cpx-20,cpy,cpx+20,cpy,inkM,1);dl(x,cpx,cpy-20,cpx,cpy+20,inkM,1);
+  x.strokeStyle=ink;x.lineWidth=2.2;x.beginPath();x.arc(cpx,cpy,9,0,Math.PI*2);x.stroke();
+  x.fillStyle=ink;x.beginPath();x.arc(cpx,cpy,3.5,0,Math.PI*2);x.fill();
+  x.font='italic 13px "IM Fell English",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('Center Pole',cpx,cpy+26);
+  // Stove jack
+  const sjOffsets={96:11.3,132:15.6,168:18.5},sjO=i2p(sjOffsets[FLOOR]||15),sjX=cpx+sjO*.707,sjY=cpy-sjO*.707;
+  x.strokeStyle='rgba(44,32,21,0.35)';x.lineWidth=1.3;x.setLineDash([4,3]);x.beginPath();x.arc(sjX,sjY,12,0,Math.PI*2);x.stroke();x.setLineDash([]);
+  x.fillStyle=inkM;x.beginPath();x.arc(sjX,sjY,3,0,Math.PI*2);x.fill();dl(x,cpx,cpy,sjX,sjY,'rgba(44,32,21,0.14)',.7);
+
+  // Stove body
+  const stBL=i2p(sL),stBW=i2p(sW),pf=.85,stY0=sjY-stBL*pf+i2p(2),stCX=sjX,stCY=stY0+stBL/2,stX=stCX-stBW/2,stY=stY0;
+  x.fillStyle=stvFl;x.fillRect(stX,stY,stBW,stBL);hr(x,stX,stY,stBW,stBL,ink,2);x.save();x.translate(stCX,stCY);x.rotate(-Math.PI/2);x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('STOVE',0,5);x.restore();
+  const dfW2=stBW*.6,dfX2=stX+(stBW-dfW2)/2;x.strokeStyle=ink;x.lineWidth=1.3;x.strokeRect(dfX2,stY-1,dfW2,5);
+  const pipeY=stY+stBL*pf;x.strokeStyle=ink;x.lineWidth=1.8;x.beginPath();x.arc(stCX,pipeY,i2p(1.5),0,Math.PI*2);x.stroke();x.fillStyle=ink;x.beginPath();x.arc(stCX,pipeY,2,0,Math.PI*2);x.fill();
+  dl(x,stCX,pipeY,sjX,sjY,'rgba(44,32,21,0.25)',1);
+
+  // Wall labels
+
+  // Spikes
+  [[.15,0],[.5,0],[.85,0],[.15,1],[.5,1],[.85,1],[0,.2],[0,.5],[0,.8],[1,.2],[1,.5],[1,.8]].forEach(([fx,fy])=>{const sx2=tx+tw*fx,sy2=ty+th*fy;x.strokeStyle=inkM;x.lineWidth=1;const sz=3.5;x.beginPath();x.moveTo(sx2-sz,sy2-sz);x.lineTo(sx2+sz,sy2+sz);x.moveTo(sx2+sz,sy2-sz);x.lineTo(sx2-sz,sy2+sz);x.stroke()});
+  // Dims, compass, scale
+  
+  const sbl=i2p(36),sbx=tx+tw-sbl-i2p(4),sby=ty+th+60;x.strokeStyle=inkM;x.lineWidth=1;x.beginPath();x.moveTo(sbx,sby);x.lineTo(sbx+sbl,sby);x.stroke();
+  for(let i=0;i<=3;i++){const bx=sbx+i2p(12)*i;x.beginPath();x.moveTo(bx,sby-4);x.lineTo(bx,sby+4);x.stroke();x.font='9px "Special Elite",monospace';x.fillStyle=inkM;x.textAlign='center';x.fillText(i+"'",bx,sby+14)}
+  x.font='italic 9px "IM Fell English",serif';x.fillStyle=inkM;x.textAlign='right';x.fillText('Scale',sbx-8,sby+4);
+  return{tx,ty,tw,th,s,i2p,cpx,cpy,sjX,sjY};
+}
+
+function drawPrairieBase(x,FLOOR,PEAK,JH,sL,sW,fL,fW,dimLabel,showStove){
+  const s=DA/FLOOR,i2p=v=>v*s,m=(CW-DA)/2,tx=m,ty=m,tw=DA,th=DA;
+  x.fillStyle=inkFl;x.fillRect(tx,ty,tw,th);hr(x,tx,ty,tw,th,ink,3);
+  [[tx,ty],[tx+tw,ty],[tx+tw,ty+th],[tx,ty+th]].forEach(([cx,cy])=>{x.strokeStyle=inkM;x.lineWidth=1.3;x.beginPath();x.arc(cx,cy,10,0,Math.PI*2);x.stroke();hl(x,cx-4,cy,cx+4,cy,inkM,.8);hl(x,cx,cy-4,cx,cy+4,inkM,.8)});
+  const cpx=tx+tw/2,cpy=ty+th/2;
+  dl(x,tx,ty,cpx,cpy,'rgba(44,32,21,0.12)',.8);dl(x,tx+tw,ty,cpx,cpy,'rgba(44,32,21,0.12)',.8);
+  dl(x,tx+tw,ty+th,cpx,cpy,'rgba(44,32,21,0.12)',.8);dl(x,tx,ty+th,cpx,cpy,'rgba(44,32,21,0.12)',.8);
+  x.strokeStyle='rgba(44,32,21,0.3)';x.lineWidth=1.2;x.beginPath();x.arc(cpx,cpy,7,0,Math.PI*2);x.stroke();
+  x.fillStyle='rgba(44,32,21,0.2)';x.beginPath();x.arc(cpx,cpy,2.5,0,Math.PI*2);x.fill();
+  x.font='italic 11px "IM Fell English",serif';x.fillStyle=inkM;x.textAlign='center';x.fillText('Peak',cpx,cpy+20);
+  // Front door and rear window — proportional to drawn wall width (matches 12×12 visual ratio)
+  const dw=tw*0.652,dcx=tx+tw/2;x.strokeStyle=ink;x.lineWidth=1.8;
+  x.beginPath();x.moveTo(dcx-dw/2,ty);x.lineTo(dcx-dw/2-10,ty-20);x.stroke();
+  x.beginPath();x.moveTo(dcx+dw/2,ty);x.lineTo(dcx+dw/2+10,ty-20);x.stroke();
+  hl(x,dcx-dw/2,ty,dcx+dw/2,ty,'rgba(232,220,198,0.9)',4);
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('FRONT DOOR',dcx,ty-28);
+  // Rear window
+  const rw=tw*0.464;x.strokeStyle=ink;x.lineWidth=1.8;
+  x.beginPath();x.moveTo(dcx-rw/2,ty+th);x.lineTo(dcx-rw/2-8,ty+th+16);x.stroke();
+  x.beginPath();x.moveTo(dcx+rw/2,ty+th);x.lineTo(dcx+rw/2+8,ty+th+16);x.stroke();
+  hl(x,dcx-rw/2,ty+th,dcx+rw/2,ty+th,'rgba(232,220,198,0.9)',4);x.fillText('REAR WINDOW',dcx,ty+th+30);
+  // Guy lines
+  [[tx,ty,-1,-1],[tx+tw,ty,1,-1],[tx+tw,ty+th,1,1],[tx,ty+th,-1,1]].forEach(([gx,gy,dx,dy])=>{const gl=34,ex=gx+dx*gl*.707,ey=gy+dy*gl*.707;dl(x,gx,gy,ex,ey,inkL,1);x.fillStyle=inkM;x.beginPath();x.arc(ex,ey,3.5,0,Math.PI*2);x.fill()});
+  let sjX=cpx,sjY=cpy;
+  if(showStove){const jDE=(JH/PEAK)*(FLOOR/2),sjO=i2p((FLOOR/2)-jDE);sjX=cpx+sjO;sjY=cpy;
+  x.strokeStyle='rgba(44,32,21,0.35)';x.lineWidth=1.3;x.setLineDash([4,3]);x.beginPath();x.arc(sjX,sjY,11,0,Math.PI*2);x.stroke();x.setLineDash([]);
+  x.fillStyle=inkM;x.beginPath();x.arc(sjX,sjY,3,0,Math.PI*2);x.fill();dl(x,cpx,cpy,sjX,sjY,'rgba(44,32,21,0.14)',.7);
+  const stBL=i2p(sL),stBW=i2p(sW),pf=.85,stY0=sjY-stBL*pf,stCX=sjX,stCY=stY0+stBL/2,stX=stCX-stBW/2,stY=stY0;
+  x.fillStyle=stvFl;x.fillRect(stX,stY,stBW,stBL);hr(x,stX,stY,stBW,stBL,ink,2);x.save();x.translate(stCX,stCY);x.rotate(-Math.PI/2);x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('STOVE',0,5);x.restore();
+}
+  // Wall labels
+
+  
+  const sbl=i2p(36),sbx=tx+tw-sbl-i2p(4),sby=ty+th+60;x.strokeStyle=inkM;x.lineWidth=1;x.beginPath();x.moveTo(sbx,sby);x.lineTo(sbx+sbl,sby);x.stroke();
+  for(let i=0;i<=3;i++){const bx=sbx+i2p(12)*i;x.beginPath();x.moveTo(bx,sby-4);x.lineTo(bx,sby+4);x.stroke();x.font='9px "Special Elite",monospace';x.fillStyle=inkM;x.textAlign='center';x.fillText(i+"'",bx,sby+13)}
+  x.font='italic 9px "IM Fell English",serif';x.fillStyle=inkM;x.textAlign='right';x.fillText('Scale',sbx-8,sby+4);
+  return{tx,ty,tw,th,s,i2p,cpx,cpy,sjX,sjY};
+}
+
+function drawSTBase(x,FW,CD,AD,TD,PEAK,JH,sL,sW,fL,fW){
+  const maxD=Math.max(FW,TD),s=DA/maxD,i2p=v=>v*s,dW=FW*s,dH=TD*s,mx=(CW-dW)/2,my=(CW-dH)/2;
+  const tx=mx,ty=my,tw=dW,tT=dH,awnH=i2p(AD),cabH=i2p(CD);
+  x.fillStyle=awnFl;x.fillRect(tx,ty,tw,awnH);x.fillStyle=inkFl;x.fillRect(tx,ty+awnH,tw,cabH);
+  hl(x,tx,ty+awnH,tx,ty+tT,ink,3);hl(x,tx+tw,ty+awnH,tx+tw,ty+tT,ink,3);hl(x,tx,ty+tT,tx+tw,ty+tT,ink,3);
+  x.strokeStyle=inkM;x.lineWidth=1.5;x.setLineDash([8,5]);
+  x.beginPath();x.moveTo(tx,ty);x.lineTo(tx+tw,ty);x.stroke();
+  x.beginPath();x.moveTo(tx,ty);x.lineTo(tx,ty+awnH);x.stroke();
+  x.beginPath();x.moveTo(tx+tw,ty);x.lineTo(tx+tw,ty+awnH);x.stroke();x.setLineDash([]);
+  const cidw=tw*.67,cidcx=tx+tw/2;
+  hl(x,tx,ty+awnH,cidcx-cidw/2,ty+awnH,ink,3);hl(x,cidcx+cidw/2,ty+awnH,tx+tw,ty+awnH,ink,3);
+  hl(x,cidcx-cidw/2,ty+awnH,cidcx+cidw/2,ty+awnH,'rgba(232,220,198,0.9)',4);
+  x.font='italic 11px "IM Fell English",serif';x.fillStyle='rgba(44,32,21,0.25)';x.textAlign='center';
+  x.fillText('\u2014 awning (open) \u2014',tx+tw/2,ty+awnH-10);x.fillText('\u2014 cabin \u2014',tx+tw/2,ty+awnH+16);
+  x.fillStyle=inkM;x.fillText('\u2014 canopy edge (open) \u2014',tx+tw/2,ty-14);x.fillText('\u2014 rear wall \u2014',tx+tw/2,ty+tT-7);
+  // Rear door+window
+  const rdy=ty+tT,rdW=tw*0.3125,rdR=tx+tw/2,rdL=rdR-rdW;
+  hl(x,rdL,rdy,rdR,rdy,'rgba(232,220,198,0.9)',4);
+  x.strokeStyle=ink;x.lineWidth=1.8;x.beginPath();x.moveTo(rdL,rdy);x.lineTo(rdL-10,rdy+18);x.stroke();
+  x.beginPath();x.moveTo(rdR,rdy);x.lineTo(rdR+10,rdy+18);x.stroke();
+  x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('REAR DOOR',(rdL+rdR)/2,rdy+34);
+  const wW=tw*0.229,wCX=tx+tw*.72;x.strokeStyle=inkM;x.lineWidth=1.3;
+  x.beginPath();x.moveTo(wCX-wW/2,rdy);x.lineTo(wCX-wW/2,rdy+10);x.stroke();
+  x.beginPath();x.moveTo(wCX+wW/2,rdy);x.lineTo(wCX+wW/2,rdy+10);x.stroke();
+  hl(x,wCX-wW/2,rdy,wCX+wW/2,rdy,inkL,1.5);x.fillText('WINDOW',wCX,rdy+34);
+  // Center pole
+  const cpx=tx+tw/2,cpy=ty+awnH;
+  dl(x,cpx-20,cpy,cpx+20,cpy,inkM,1);dl(x,cpx,cpy-20,cpx,cpy+20,inkM,1);
+  x.strokeStyle=ink;x.lineWidth=2.2;x.beginPath();x.arc(cpx,cpy,9,0,Math.PI*2);x.stroke();
+  x.fillStyle=ink;x.beginPath();x.arc(cpx,cpy,3.5,0,Math.PI*2);x.fill();
+  x.font='italic 13px "IM Fell English",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('Center Pole',cpx,cpy-16);
+  // Awning stove
+  const hdX=FW/2,hdY=AD,hd=Math.sqrt(hdX*hdX+hdY*hdY),jF=JH/PEAK,sjOI=(1-jF)*hd;
+  const dX=hdX/hd,dY=-hdY/hd,sjX=cpx+i2p(sjOI*dX),sjY=cpy+i2p(sjOI*dY);
+  x.strokeStyle='rgba(44,32,21,0.35)';x.lineWidth=1.3;x.setLineDash([4,3]);x.beginPath();x.arc(sjX,sjY,12,0,Math.PI*2);x.stroke();x.setLineDash([]);
+  x.fillStyle=inkM;x.beginPath();x.arc(sjX,sjY,3,0,Math.PI*2);x.fill();dl(x,cpx,cpy,sjX,sjY,'rgba(44,32,21,0.14)',.7);
+  const stBL=i2p(sL),stBW=i2p(sW),pf=.85,stY0=sjY-stBL*pf+i2p(2),stCX=sjX,stCY=stY0+stBL/2,stX=stCX-stBW/2,stY=stY0;
+  x.fillStyle=stvFl;x.fillRect(stX,stY,stBW,stBL);hr(x,stX,stY,stBW,stBL,ink,2);x.save();x.translate(stCX,stCY);x.rotate(-Math.PI/2);x.font='600 14px "Cormorant Garamond",serif';x.fillStyle=ink;x.textAlign='center';x.fillText('STOVE',0,5);x.restore();
+  // Side labels
+  x.font='italic 11px "IM Fell English",serif';
+  // Dims
+  
+  
+  const sbl=i2p(36),sbx=tx+dW-sbl-i2p(4),sby=ty+tT+60;x.strokeStyle=inkM;x.lineWidth=1;x.beginPath();x.moveTo(sbx,sby);x.lineTo(sbx+sbl,sby);x.stroke();
+  for(let i=0;i<=3;i++){const bx=sbx+i2p(12)*i;x.beginPath();x.moveTo(bx,sby-4);x.lineTo(bx,sby+4);x.stroke();x.font='9px "Special Elite",monospace';x.fillStyle=inkM;x.textAlign='center';x.fillText(i+"'",bx,sby+14)}
+  x.font='italic 9px "IM Fell English",serif';x.fillStyle=inkM;x.textAlign='right';x.fillText('Scale',sbx-8,sby+4);
+  return{tx,ty,tw,tT,awnH,cabH,s,i2p,cpx,cpy,cabTY:{x:tx,y:ty+awnH}};
+}
+
+// ═══════ TENT DATA ═══════
+const T={
+shackleton:{name:'The Shackleton Tent',tag:'The classic wall tent, redefined. Built for the long camp, from elk season to basecamp.',
+sizes:[
+{key:'8\u00d78',label:"8\u2032 \u00d7 8\u2032",specs:{Floor:'66.69 sq ft (96\u2033 \u00d7 96\u2033)',Peak:'96\u2033',Corner:'24\u2033','Stove Jack':'84\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:96,PEAK:96,CH:24,JH:84,dW:30,cO:15,wW:22,sL:15,sW:7.9,fL:16.9,fW:20.7,dim:'8 ft (96\u2033)',
+ layouts:[
+  {id:'A',title:'Solo Cot',desc:'One Heritage Cot along the left sidewall, centered front-to-back. Room to move, room to breathe.',sleeps:1,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawCot(x,tx+i2p(6),ty+(th-i2p(84))/2,i2p(30),i2p(84),-Math.PI/2)}},
+  {id:'B',title:'Bedroll L-Shape',desc:'Two 34″ Cowboy Bedrolls in an L-shape \u2014 left wall and rear wall.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,cpx,cpy}=b;drawBR(x,tx+i2p(2),ty+i2p(2),i2p(31),i2p(62),'top',-Math.PI/2);drawBR(x,tx+i2p(32),ty+th-i2p(31)-i2p(2),i2p(62),i2p(31),'right',0)}}
+]},
+{key:'11\u00d711',label:"11\u2032 \u00d7 11\u2032",specs:{Floor:'118.81 sq ft (132\u2033 \u00d7 132\u2033)',Peak:'108\u2033',Corner:'24\u2033','Stove Jack':'94\u2033',Stove:'Nomad View Large',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:132,PEAK:108,CH:24,JH:94,dW:34,cO:20,wW:26,sL:18.1,sW:9.8,fL:20,fW:25,dim:'11 ft (132\u2033)',
+ layouts:[
+  {id:'A',title:'Twin Cots',desc:'Two Heritage Cots along opposite sidewalls, centered. The classic symmetric camp.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,cpy}=b;const ly=ty+(th-i2p(84))/2;drawCot(x,tx+i2p(2),ly,i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(30)-i2p(2),ly,i2p(30),i2p(84),Math.PI/2)}},
+  {id:'B',title:'Three Cots',desc:'Three Heritage Cots \u2014 two shifted forward on sidewalls, one along the rear.',sleeps:3,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawCot(x,tx+i2p(2),ty+i2p(2),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(30)-i2p(2),ty+i2p(2),i2p(30),i2p(84),Math.PI/2);drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(2),i2p(84),i2p(30),0)}},
+  {id:'C',title:'Cots + Bedrolls',desc:'Two cots staggered diagonally, two 34″ Cowboy Bedrolls in opposite corners.',sleeps:4,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawCot(x,tx+tw-i2p(30)-i2p(2),ty+i2p(2),i2p(30),i2p(84),Math.PI/2);drawCot(x,tx+i2p(2),ty+th-i2p(84)-i2p(2),i2p(30),i2p(84),-Math.PI/2);drawBR(x,tx+i2p(2),ty+i2p(2),i2p(72),i2p(31),'left',0);drawBR(x,tx+tw-i2p(72)-i2p(2),ty+th-i2p(31)-i2p(2),i2p(72),i2p(31),'right',0)}}
+]},
+{key:'14\u00d714',label:"14\u2032 \u00d7 14\u2032",specs:{Floor:'203 sq ft (168\u2033 \u00d7 168\u2033)',Peak:'120\u2033',Corner:'24\u2033','Stove Jack':'105\u2033',Stove:'Nomad View Large',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:168,PEAK:120,CH:24,JH:105,dW:38,cO:25,wW:30,sL:18.1,sW:9.8,fL:20,fW:25,dim:'14 ft (168\u2033)',
+ layouts:[
+  {id:'A',title:'Camp & Lounge',desc:'Three cots plus a sitting area \u2014 Roll Top Table with three Butterfly Chairs.',sleeps:3,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;const cW=i2p(30),cL=i2p(84),cS=i2p(81);
+   drawCot(x,tx+i2p(6),ty+i2p(2),cW,cS,-Math.PI/2);drawCot(x,tx+i2p(6),ty+i2p(2)+cS+i2p(2),cW,cS,Math.PI/2);drawCot(x,tx+tw-i2p(6)-cW,ty+i2p(2),cW,cL,Math.PI/2);
+   const tCX=tx+tw/2+i2p(18),tCY=ty+i2p(109);drawTable(x,tCX,tCY,i2p(42),i2p(28),'PANGEAN ROLL','42\u2033 \u00d7 28\u2033',true);
+   drawChairS(x,tCX-i2p(42)/2-i2p(16),tCY,0,s);drawChairS(x,tCX+i2p(42)/2+i2p(16),tCY,0,s);drawChairS(x,tCX,tCY+i2p(30),0,s)}},
+  {id:'B',title:'Four Cots',desc:'Four Heritage Cots \u2014 two end-to-end on each sidewall. Wide center aisle.',sleeps:4,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,cpx,cpy}=b;const cW=i2p(30),cS=i2p(81),lx=tx+i2p(6),rx=tx+tw-i2p(6)-cW;
+   drawCot(x,lx,ty+i2p(2),cW,cS,-Math.PI/2);drawCot(x,lx,ty+i2p(2)+cS+i2p(2),cW,cS,Math.PI/2);drawCot(x,rx,ty+i2p(2),cW,cS,Math.PI/2);drawCot(x,rx,ty+i2p(2)+cS+i2p(2),cW,cS,-Math.PI/2)}},
+  {id:'C',title:'Bunkhouse',desc:'Five Heritage Cots \u2014 four on sidewalls, one along the rear wall. Full crew.',sleeps:5,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const cW=i2p(30),cL=i2p(84),cS=i2p(81),lx=tx+i2p(6),rx=tx+tw-i2p(6)-cW;
+   drawCot(x,lx,ty+i2p(2),cW,cS,-Math.PI/2);drawCot(x,lx,ty+i2p(2)+cS+i2p(2),cW,cS,Math.PI/2);drawCot(x,rx,ty+i2p(2),cW,cS,Math.PI/2);drawCot(x,rx,ty+i2p(2)+cS+i2p(2),cW,cS,-Math.PI/2);drawCot(x,tx+(tw-cL)/2,ty+th-i2p(6)-cW,cL,cW,0)}},
+  {id:'D',title:'Queen + Cots & Lounge',desc:'Queen mattress in the rear right corner, two Heritage Cots on opposite sidewalls, Roll Top Table with four Butterfly Chairs in the upper left.',sleeps:4,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;
+   drawQueen(x,tx+tw-i2p(80)-i2p(2),ty+th-i2p(60)-i2p(2),i2p(80),i2p(60),0);
+   drawCot(x,tx+tw-i2p(30)-i2p(2),ty+i2p(2),i2p(30),i2p(84),Math.PI/2);
+   drawCot(x,tx+i2p(2),ty+th-i2p(84)-i2p(2),i2p(30),i2p(84),-Math.PI/2);
+   const tCX=tx+i2p(57),tCY=ty+i2p(47),tR=-Math.PI/18;
+   x.save();x.translate(tCX,tCY);x.rotate(tR);drawTable(x,0,0,i2p(42),i2p(28),'PANGEAN ROLL','42\u2033 \u00d7 28\u2033',true);x.restore();
+   const rpt=(ox,oy)=>({cx:tCX+ox*Math.cos(tR)-oy*Math.sin(tR),cy:tCY+ox*Math.sin(tR)+oy*Math.cos(tR)});
+   const cL=rpt(-i2p(21)-i2p(16),0),cR=rpt(i2p(21)+i2p(16),0),cT=rpt(0,-i2p(14)-i2p(16)),cB=rpt(0,i2p(14)+i2p(16));
+   drawChairS(x,cL.cx,cL.cy,Math.PI/2+tR,s);drawChairS(x,cR.cx,cR.cy,Math.PI/2+tR,s);drawChairS(x,cT.cx,cT.cy,tR,s);drawChairS(x,cB.cx,cB.cy,tR,s)}}
+]}]},
+
+prairie:{name:'The Prairie Tent',tag:'The pyramid tent \u2014 no center pole, A-frame dormer, open floor plan. Light, lofty, and unobstructed.',
+sizes:[
+{key:'8\u00d78',label:"8\u2032 \u00d7 8\u2032",specs:{Floor:'57.5 sq ft (91\u2033 \u00d7 91\u2033)',Peak:'82\u2033','Stove Jack':'66\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:91,PEAK:82,JH:66,sL:15,sW:8,fL:16,fW:13.5,dim:'7 ft 7 in (91\u2033)',
+ layouts:[
+  {id:'A',title:'Solo + Stove',desc:'One 34″ Cowboy Bedroll along the left wall with a Nomad View stove.',sleeps:1,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawBR(x,tx+i2p(6),ty+(th-i2p(72))/2,i2p(31),i2p(72),'top',-Math.PI/2)}},
+  {id:'B',title:'Double Bedroll',desc:'Two 34″ Cowboy Bedrolls side by side, heads toward rear. No stove.',sleeps:2,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const gap=i2p((91-62)/3),brW=i2p(31),brL=i2p(72),brY=ty+th-brL-i2p(6);drawBR(x,tx+gap,brY,brW,brL,'bottom',-Math.PI/2);drawBR(x,tx+gap+brW+gap,brY,brW,brL,'bottom',-Math.PI/2)}}
+]},
+{key:'10\u00d710',label:"10\u2032 \u00d7 10\u2032",specs:{Floor:'90.25 sq ft (114\u2033 \u00d7 114\u2033)',Peak:'106\u2033','Stove Jack':'90\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:114,PEAK:106,JH:90,sL:15,sW:8,fL:16,fW:13.5,dim:'9 ft 6 in (114\u2033)',
+ layouts:[
+  {id:'A',title:'Cot + Lounge',desc:'One Heritage Cot along the rear, Butterfly Chair and Folding Table. With stove.',sleeps:1,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0);drawTable(x,tx+i2p(33),ty+i2p(26),i2p(20),i2p(20),'FOLDING','20\u2033\u00d720\u2033');drawChairS(x,tx+i2p(28),ty+i2p(58),20*Math.PI/180,s)}},
+  {id:'B',title:'Two Bedrolls',desc:'Two 34″ Cowboy Bedrolls \u2014 left wall and rear wall offset right. With stove.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawBR(x,tx+i2p(6),ty+i2p(6),i2p(31),i2p(72),'top',-Math.PI/2);drawBR(x,tx+(tw-i2p(72))/2+i2p(10),ty+th-i2p(31)-i2p(4),i2p(72),i2p(31),'left',0)}},
+  {id:'C',title:'Twin Cots',desc:'Two Heritage Cots along opposite sidewalls. No stove.',sleeps:2,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const ly=ty+(th-i2p(84))/2;drawCot(x,tx+i2p(10),ly,i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(10)-i2p(30),ly,i2p(30),i2p(84),Math.PI/2)}},
+  {id:'D',title:'Three Bedrolls',desc:'Three 34″ Cowboy Bedrolls side by side, heads toward rear. No stove \u2014 max capacity.',sleeps:3,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(4.5),startX=tx+i2p(6),brY=ty+th-brL-i2p(6);for(let i=0;i<3;i++)drawBR(x,startX+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
+  {id:'E',title:'Queen Mattress',desc:'One queen mattress along the rear wall, centered. Head toward the rear window.',sleeps:2,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const qx=tx+(tw-i2p(60))/2,qy=ty+th-i2p(80)-i2p(2),qw=i2p(60),qh=i2p(80);x.save();x.translate(qx+qw/2,qy+qh/2);x.scale(1,-1);drawQueen(x,-qw/2,-qh/2,qw,qh,0);x.restore()}}
+]},
+{key:'12\u00d712',label:"12\u2032 \u00d7 12\u2032",specs:{Floor:'132.25 sq ft (138\u2033 \u00d7 138\u2033)',Peak:'118\u2033','Stove Jack':'104\u2033',Stove:'Nomad View Large',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:138,PEAK:118,JH:104,sL:18.1,sW:9.8,fL:20,fW:18,dim:'11 ft 6 in (138\u2033)',
+ layouts:[
+  {id:'A',title:'L-Shape + Lounge',desc:'Two Heritage Cots in an L-shape, Butterfly Chair and Folding Table. With stove.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;drawCot(x,tx+i2p(6),ty+th-i2p(6)-i2p(30)-i2p(84),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+i2p(6)+i2p(30)+i2p(4),ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0);drawTable(x,tx+tw-i2p(42),ty+i2p(28),i2p(20),i2p(20),'FOLDING','20\u2033\u00d720\u2033');drawChairS(x,tx+tw-i2p(34),ty+i2p(60),-15*Math.PI/180,s)}},
+  {id:'B',title:'Three Cots',desc:'Three Heritage Cots \u2014 two sidewalls shifted forward, one along the rear. No stove.',sleeps:3,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawCot(x,tx+i2p(6),ty+i2p(9),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(6)-i2p(30),ty+i2p(9),i2p(30),i2p(84),Math.PI/2);drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0)}},
+  {id:'C',title:'Four Bedrolls',desc:'Four 34″ Cowboy Bedrolls side by side, heads toward rear. No stove.',sleeps:4,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(2.8),brY=ty+th-brL-i2p(6);for(let i=0;i<4;i++)drawBR(x,tx+gap+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
+]}]},
+
+'split-torrent':{name:'The Split-Torrent Tent',tag:'Dual-zone \u2014 enclosed cabin for sleeping, open awning veranda for living. The expedition basecamp.',
+sizes:[
+{key:'8\u00d711',label:"8\u2032 \u00d7 11\u2032",specs:{'Cabin Floor':'45.4 sq ft (96\u2033 \u00d7 68\u2033)','Awning Floor':'48.1 sq ft (96\u2033 \u00d7 72\u2033)',Total:'96\u2033 \u00d7 140\u2033',Peak:'96\u2033 (at partition)','Stove Jack':'84\u2033 (awning)',Stove:'Nomad View Medium',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FW:96,CD:68,AD:72,TD:140,PEAK:96,JH:84,sL:15,sW:8,fL:16,fW:13.5,
+ layouts:[
+  {id:'A',title:'Solo Explorer',desc:'One Heritage Cot horizontal across the cabin. Chair and table under awning.',sleeps:1,stove:true,
+   draw(x,b){const{tx,ty,tw,awnH,cabTY,i2p,s}=b;drawCot(x,cabTY.x+(i2p(96)-i2p(84))/2+i2p(3),cabTY.y+i2p(68)-i2p(13)-i2p(30),i2p(84),i2p(30),0,'HERITAGE COT');drawTable(x,tx+i2p(20),ty+i2p(20),i2p(20),i2p(20),'PANGEAN','20\u2033\u00d720\u2033');drawChairS(x,tx+i2p(26),ty+awnH-i2p(20),Math.PI/10,s)}},
+  {id:'B',title:'Duo Camp',desc:'Two 34″ Cowboy Bedrolls stacked in the cabin. Two chairs, one large table and one small table under awning.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,awnH,cabTY,i2p,s}=b;const brW=i2p(72),brH=i2p(31),brX=cabTY.x+i2p(93)-brW;
+   const br1Y=cabTY.y+i2p(65)-brH;drawBR(x,brX,br1Y,brW,brH,'right',0);drawBR(x,brX,br1Y-brH-i2p(2),brW,brH,'right',0);
+   drawTable(x,tx+i2p(20),ty+i2p(20),i2p(20),i2p(20),'PANGEAN','20\u2033\u00d720\u2033');drawTable(x,tx+tw-i2p(18),ty+i2p(18),i2p(16),i2p(16),'PANGEAN','16\u2033\u00d716\u2033');
+   drawChairS(x,tx+i2p(26),ty+awnH-i2p(20),Math.PI/10,s);drawChairS(x,tx+tw-i2p(18),ty+awnH-i2p(26),-80*Math.PI/180,s)}}
+]},
+{key:'11\u00d714',label:"11\u2032 \u00d7 14\u2032",specs:{'Cabin Floor':'76.1 sq ft (132\u2033 \u00d7 83\u2033)','Awning Floor':'87 sq ft (132\u2033 \u00d7 95\u2033)',Total:'132\u2033 \u00d7 178\u2033',Peak:'108\u2033 (at partition)','Stove Jacks':'94\u2033 (awning + cabin)',Stove:'Nomad View Large',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FW:132,CD:83,AD:95,TD:178,PEAK:108,JH:94,sL:18.1,sW:9.8,fL:20,fW:18,
+ layouts:[
+  {id:'A',title:'Expedition Base',desc:'Two Heritage Cots along cabin sidewalls. Four chairs, one large table and one small table in awning. Dual stove jacks allow for optional placement in awning or in cabin.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,awnH,cabTY,i2p,s}=b;const cabCL=i2p(79);drawCot(x,cabTY.x+i2p(6),cabTY.y+i2p(2),i2p(30),cabCL,Math.PI/2);drawCot(x,cabTY.x+i2p(132-6)-i2p(30),cabTY.y+i2p(2),i2p(30),cabCL,-Math.PI/2);
+   drawChairS(x,tx+i2p(30),ty+i2p(26),(35+90)*Math.PI/180,s);drawChairS(x,tx+i2p(30),ty+i2p(72),(-28+90)*Math.PI/180,s);
+   drawChairS(x,tx+i2p(106),ty+i2p(26),(-38-90)*Math.PI/180,s);drawChairS(x,tx+i2p(106),ty+i2p(72),(32-90)*Math.PI/180,s);
+   drawTable(x,tx+i2p(14),ty+i2p(49),i2p(20),i2p(20),'PANGEAN','20\u2033\u00d720\u2033');drawTable(x,tx+i2p(120),ty+i2p(49),i2p(16),i2p(16),'PANGEAN','16\u2033\u00d716\u2033');
+   const FW=132,CD=83,PEAK=108,JH=94,sL=18.1,sW=9.8,fL=20,fW=18;
+   const cabDiagX=FW/2,cabDiagY=CD,cabDiag=Math.sqrt(cabDiagX*cabDiagX+cabDiagY*cabDiagY),cabJF=JH/PEAK,cabSjOff=(1-cabJF)*cabDiag;
+   const cabDirX=-cabDiagX/cabDiag,cabDirY=cabDiagY/cabDiag;
+   const csjX=b.cpx+i2p(cabSjOff*cabDirX),csjY=b.cpy+i2p(cabSjOff*cabDirY);
+   x.strokeStyle='rgba(44,32,21,0.35)';x.lineWidth=1.3;x.setLineDash([4,3]);x.beginPath();x.arc(csjX,csjY,12,0,Math.PI*2);x.stroke();x.setLineDash([]);
+   x.fillStyle=inkM;x.beginPath();x.arc(csjX,csjY,3,0,Math.PI*2);x.fill();dl(x,b.cpx,b.cpy,csjX,csjY,'rgba(44,32,21,0.14)',.7);
+   x.strokeStyle='rgba(44,32,21,0.25)';x.lineWidth=0.7;x.setLineDash([3,3]);x.beginPath();x.arc(b.cpx,b.cpy,30,Math.PI/2,3*Math.PI/4);x.stroke();x.setLineDash([]);
+   const cStBL=i2p(sL),cStBW=i2p(sW),cPF=0.85,cStYtop=csjY-cStBL*(1-cPF)-i2p(1),cStCX=csjX,cStXf=cStCX-cStBW/2;
+   x.fillStyle='rgba(110,75,35,0.06)';x.fillRect(cStXf,cStYtop,cStBW,cStBL);
+   x.strokeStyle='rgba(44,32,21,0.25)';x.lineWidth=1;x.setLineDash([3,3]);hr(x,cStXf,cStYtop,cStBW,cStBL,'rgba(44,32,21,0.25)',1);x.setLineDash([]);
+   const cDfW=cStBW*.6,cDfX=cStXf+(cStBW-cDfW)/2,cStYbot=cStYtop+cStBL;
+   x.strokeStyle='rgba(44,32,21,0.25)';x.lineWidth=1;x.setLineDash([3,3]);x.strokeRect(cDfX,cStYbot-4,cDfW,5);x.setLineDash([]);
+   x.font='italic 9px "IM Fell English",serif';x.fillStyle='rgba(44,32,21,0.35)';x.textAlign='center';x.fillText('alt. placement',cStCX,cStYtop-8);
+   const cPipeY=cStYtop+cStBL*(1-cPF);x.strokeStyle=ink;x.lineWidth=0.9;x.beginPath();x.arc(cStCX,cPipeY,i2p(2),0,Math.PI*2);x.stroke();x.fillStyle=ink;x.beginPath();x.arc(cStCX,cPipeY,2.5,0,Math.PI*2);x.fill();
+   dl(x,cStCX,cPipeY,csjX,csjY,'rgba(44,32,21,0.25)',1);
+
+}},
+  {id:'B',title:'Crew Quarters',desc:'Three 34″ Cowboy Bedrolls across cabin. Three chairs, one large table and one small table. Stove in awning area.',sleeps:3,stove:true,
+   draw(x,b){const{tx,ty,tw,awnH,cabTY,i2p,s}=b;const brW=i2p(31),brL=i2p(72),brY=cabTY.y+i2p(83)-i2p(6)-brL;
+   for(let i=0;i<3;i++)drawBR(x,cabTY.x+i2p(9.75*(i+1)+31*i),brY,brW,brL,'bottom',-Math.PI/2);
+   drawChairS(x,tx+i2p(30),ty+i2p(26),(35+90)*Math.PI/180,s);drawChairS(x,tx+i2p(30),ty+i2p(72),(-28+90)*Math.PI/180,s);drawChairS(x,tx+i2p(106),ty+i2p(26),(-38-90)*Math.PI/180,s);
+   drawTable(x,tx+i2p(62),ty+i2p(39),i2p(20),i2p(20),'PANGEAN','20\u2033\u00d720\u2033');drawTable(x,tx+i2p(108),ty+i2p(59),i2p(16),i2p(16),'PANGEAN','16\u2033\u00d716\u2033')}},
+  {id:'C',title:'Queen & Cot',desc:'Queen mattress along the right sidewall, Heritage Cot along the left. Three chairs, one large table and one small table in awning. Dual stove jacks allow for optional placement in awning or in cabin.',sleeps:3,stove:true,
+   draw(x,b){const{tx,ty,tw,awnH,cabTY,cpx,cpy,i2p,s}=b;
+   drawQueen(x,cabTY.x+i2p(132-60-2),cabTY.y+i2p(2),i2p(60),i2p(80),0);
+   drawCot(x,cabTY.x+i2p(6),cabTY.y+i2p(2),i2p(30),i2p(79),Math.PI/2);
+   drawChairS(x,tx+i2p(30),ty+i2p(26),(35+90)*Math.PI/180,s);drawChairS(x,tx+i2p(30),ty+i2p(72),(-28+90)*Math.PI/180,s);drawChairS(x,tx+i2p(106),ty+i2p(26),(-38-90)*Math.PI/180,s);
+   drawTable(x,tx+i2p(62),ty+i2p(39),i2p(20),i2p(20),'PANGEAN','20\u2033\u00d720\u2033');drawTable(x,tx+i2p(108),ty+i2p(59),i2p(16),i2p(16),'PANGEAN','16\u2033\u00d716\u2033');
+   const FW=132,CD=83,PEAK=108,JH=94,sL=18.1,sW=9.8,fL=20,fW=18;
+   const cabDiagX=FW/2,cabDiagY=CD,cabDiag=Math.sqrt(cabDiagX*cabDiagX+cabDiagY*cabDiagY),cabJF=JH/PEAK,cabSjOff=(1-cabJF)*cabDiag;
+   const cabDirX=-cabDiagX/cabDiag,cabDirY=cabDiagY/cabDiag;
+   const csjX=cpx+i2p(cabSjOff*cabDirX),csjY=cpy+i2p(cabSjOff*cabDirY);
+   x.strokeStyle='rgba(44,32,21,0.35)';x.lineWidth=1.3;x.setLineDash([4,3]);x.beginPath();x.arc(csjX,csjY,12,0,Math.PI*2);x.stroke();x.setLineDash([]);
+   x.fillStyle=inkM;x.beginPath();x.arc(csjX,csjY,3,0,Math.PI*2);x.fill();dl(x,cpx,cpy,csjX,csjY,'rgba(44,32,21,0.14)',.7);
+   x.strokeStyle='rgba(44,32,21,0.25)';x.lineWidth=0.7;x.setLineDash([3,3]);x.beginPath();x.arc(cpx,cpy,30,Math.PI/2,3*Math.PI/4);x.stroke();x.setLineDash([]);
+
+   const cStBL=i2p(sL),cStBW=i2p(sW),cPF=0.85,cStYtop=csjY-cStBL*(1-cPF)-i2p(1),cStCX=csjX,cStXf=cStCX-cStBW/2;
+   x.fillStyle='rgba(110,75,35,0.06)';x.fillRect(cStXf,cStYtop,cStBW,cStBL);
+   x.strokeStyle='rgba(44,32,21,0.25)';x.lineWidth=1;x.setLineDash([3,3]);hr(x,cStXf,cStYtop,cStBW,cStBL,'rgba(44,32,21,0.25)',1);
+   const cDfW=cStBW*.6,cDfX=cStXf+(cStBW-cDfW)/2,cStYbot=cStYtop+cStBL;
+   x.strokeRect(cDfX,cStYbot-4,cDfW,5);x.setLineDash([]);
+   x.font='italic 9px "IM Fell English",serif';x.fillStyle='rgba(44,32,21,0.35)';x.textAlign='center';x.fillText('alt. placement',cStCX,cStYtop-8);
+   const cPipeY=cStYtop+cStBL*(1-cPF);x.strokeStyle=ink;x.lineWidth=0.9;x.beginPath();x.arc(cStCX,cPipeY,i2p(2),0,Math.PI*2);x.stroke();x.fillStyle=ink;x.beginPath();x.arc(cStCX,cPipeY,2.5,0,Math.PI*2);x.fill();
+   dl(x,cStCX,cPipeY,csjX,csjY,'rgba(44,32,21,0.25)',1);
+
+}}
+]}]}
+};
+
+// ═══════ UI ═══════
+let curLine='shackleton',curSI=0,curLI=0;
+function render(){
+  const line=T[curLine],sz=line.sizes[curSI],layout=sz.layouts[curLI],x=mkCtx();let base;
+  if(curLine==='shackleton')base=drawShackletonBase(x,sz.FLOOR,sz.PEAK,sz.CH,sz.JH,sz.dW,sz.cO,sz.wW,sz.sL,sz.sW,sz.fL,sz.fW,sz.dim);
+  else if(curLine==='prairie')base=drawPrairieBase(x,sz.FLOOR,sz.PEAK,sz.JH,sz.sL,sz.sW,sz.fL,sz.fW,sz.dim,layout.stove);
+  else base=drawSTBase(x,sz.FW,sz.CD,sz.AD,sz.TD,sz.PEAK,sz.JH,sz.sL,sz.sW,sz.fL,sz.fW);
+  layout.draw(x,base);updateUI();
+}
+function updateUI(){
+  const line=T[curLine],sz=line.sizes[curSI],layout=sz.layouts[curLI];
+  document.getElementById('ON').innerHTML=sz.layouts.map((l,i)=>'<button class="opt-btn'+(i===curLI?' on':'')+'" onclick="curLI='+i+';render()">Option '+l.id+'</button>').join('');
+  document.getElementById('DSC').innerHTML='<h3>'+layout.title+'</h3><p>'+layout.desc+'</p><div class="badge-row"><span class="badge badge-y">Sleeps '+layout.sleeps+'</span><span class="badge '+(layout.stove?'badge-y':'badge-n')+'">'+(layout.stove?'With Stove':'No Stove')+'</span></div>';
+  const sp=sz.specs,h=[];
+  // Helpers
+  function hdr(t){return '<div class="spec-hdr"><span class="spec-hdr-text">'+t+'</span></div>'}
+  function li(k,v){return '<div class="gear-item"><div class="k">'+k+'</div><div class="v">'+v+'</div></div>'}
+  function sl(k,v){return '<div class="sl"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'}
+  // Data
+  const TD={
+    'shackleton':{
+      '8\u00d78':{bt:{pw:'44 lbs 2 oz',pd:'12\u2033\u00d712\u2033\u00d734\u2033',shell:'32 lbs 11 oz'},rf:{pw:'44 lbs 5 oz',pd:'14\u2033\u00d712\u2033\u00d735\u2033',shell:'26 lbs 3 oz',floor:'6 lbs 10 oz'},poles:'5 lbs 1 oz',spikes:'4 lbs 2 oz',fa:'66.69 sq ft',peak:'96\u2033',corner:'24\u2033',jh:'84\u2033',sp:16,stv:'Medium'},
+      '11\u00d711':{bt:{pw:'57 lbs 5 oz',pd:'14\u2033\u00d710\u2033\u00d740\u2033',shell:'45 lbs 9 oz'},rf:{pw:'58 lbs',pd:'14\u2033\u00d710\u2033\u00d740\u2033',shell:'35 lbs 14 oz',floor:'9 lbs 11 oz'},poles:'5 lbs 9 oz',spikes:'4 lbs 2 oz',fa:'118.81 sq ft',peak:'108\u2033',corner:'24\u2033',jh:'94\u2033',sp:16,stv:'Large'},
+      '14\u00d714':{bt:{pw:'77 lbs 8 oz',pd:'14\u2033\u00d714\u2033\u00d742\u2033',shell:'63 lbs'},rf:{pw:'79 lbs',pd:'12\u2033\u00d715\u2033\u00d742\u2033',shell:'47 lbs 11 oz',floor:'17 lbs 1 oz'},poles:'6 lbs 4 oz',spikes:'4 lbs 2 oz',fa:'203 sq ft',peak:'120\u2033',corner:'24\u2033',jh:'105\u2033',sp:16,stv:'Large'}
+    },
+    'prairie':{
+      '8\u00d78':{pw:'38 lbs',pd:'12\u2033\u00d712\u2033\u00d730\u2033',fa:'57.5 sq ft',peak:'82\u2033',jh:'66\u2033',sp:12,stv:'Medium'},
+      '10\u00d710':{pw:'47 lbs',pd:'12\u2033\u00d712\u2033\u00d735\u2033',fa:'90.25 sq ft',peak:'106\u2033',jh:'90\u2033',sp:12,stv:'Medium'},
+      '12\u00d712':{pw:'60 lbs',pd:'14\u2033\u00d712\u2033\u00d738\u2033',fa:'132.25 sq ft',peak:'118\u2033',jh:'104\u2033',sp:12,stv:'Large'}
+    },
+    'split-torrent':{
+      '8\u00d711':{pw:'48 lbs',pd:'14\u2033\u00d78\u2033\u00d738\u2033',fa:'45.4 sq ft cabin + 48.1 sq ft awning',peak:'96\u2033',jh:'84\u2033 (awning)',sp:16,stv:'Medium'},
+      '11\u00d714':{pw:'66 lbs',pd:'15\u2033\u00d712\u2033\u00d740\u2033',fa:'76.1 sq ft cabin + 87 sq ft awning',peak:'108\u2033',jh:'94\u2033 (awning + cabin)',sp:16,stv:'Large'}
+    }
+  };
+  const td=TD[curLine]&&TD[curLine][sz.key]||{};
+  const isShack=curLine==='shackleton';
+  // ── THE TENT ──
+  const tentLineName=line.name.replace('The ','').replace(' Tent','');
+  h.push('<div class="spec-section">'+hdr('The Tent \u2014 '+tentLineName+' '+sz.label));
+  if(isShack){
+    h.push('<div class="spec-cols"><div class="spec-col">');
+    h.push('<div class="col-title">Bathtub Floor</div>');
+    h.push(sl('Packed Weight',td.bt.pw));
+    h.push(sl('Packed Size',td.bt.pd));
+    h.push(sl('Shell Weight',td.bt.shell));
+    h.push('</div><div class="spec-col">');
+    h.push('<div class="col-title">Removable Floor</div>');
+    h.push(sl('Packed Weight',td.rf.pw));
+    h.push(sl('Packed Size',td.rf.pd));
+    h.push(sl('Shell Weight',td.rf.shell));
+    h.push(sl('Floor Weight',td.rf.floor));
+    h.push('</div></div>');
+    h.push(li('Floor Area',td.fa));
+    h.push(li('Peak Height',td.peak));
+    h.push(li('Corner Height',td.corner));
+    h.push(li('Pole Weight',td.poles));
+    h.push(li('Spike Weight',td.spikes));
+    h.push(li('Spikes',td.sp+' aluminum'));
+    h.push(li('Shell','7 oz Sunforger canvas'));
+    h.push(li('Structure',sp.Structure||''));
+  }else{
+    h.push('<div class="gear-list">');
+    h.push(li('Floor Area',td.fa||''));
+    h.push(li('Peak Height',td.peak||''));
+    h.push(li('Packed Weight',td.pw||''));
+    h.push(li('Packed Size',td.pd||''));
+    h.push(li('Spikes',(td.sp||'')+' aluminum'));
+    h.push(li('Shell','7 oz Sunforger canvas'));
+    h.push(li('Structure',sp.Structure||''));
+    h.push('</div>');
+  }
+  h.push('</div>');
+  // ── ELLIS ACCESSORIES ──
+  const d=layout.desc;
+  const acc=[];
+  // Cots
+  const aCotM=d.match(/(\w+)\s+Heritage\s+Cot/i);
+  if(aCotM){const n={'One':1,'Two':2,'Three':3,'Four':4,'Five':5}[aCotM[1]]||1;acc.push(li('Heritage Cot',n+'\u00d7'));}
+  // Bedrolls
+  const aBrM=d.match(/(\w+)\s+34["\u2033]\s+Cowboy\s+Bedroll/i)||d.match(/(\w+)\s+Cowboy\s+Bedroll/i);
+  if(aBrM){const n={'One':1,'Two':2,'Three':3,'Four':4}[aBrM[1]]||1;acc.push(li('34\u2033 Cowboy Bedroll',n+'\u00d7'));}
+  // Queen mattress
+  if(d.match(/queen\s+mattress/i)) acc.push(li('Queen Mattress','1\u00d7'));
+  // Stove
+  if(layout.stove) acc.push(li(sz.specs.Stove||sz.specs.Stoves||'Nomad View','1\u00d7'));
+  // Chairs
+  const aChairCt=d.match(/[Ff]our.{0,5}chairs?/i)?4:d.match(/[Tt]hree.{0,5}chairs?/i)?3:d.match(/[Tt]wo.{0,5}chairs?/i)?2:d.match(/chair/i)?1:0;
+  if(aChairCt) acc.push(li('Pangean Butterfly Chair',aChairCt+'\u00d7'));
+  // Tables
+  const aHasRoll=d.match(/[Rr]oll\s*[Tt]op/i);
+  const aHasLgTbl=d.match(/large table/i);
+  const aHasSmTbl=d.match(/small table/i);
+  const aTableCt=d.match(/[Tt]wo tables/i)?2:d.match(/table/i)?1:0;
+  if(aHasRoll) acc.push(li('Pangean Roll Top Table','1\u00d7'));
+  if(aHasLgTbl) acc.push(li('Pangean Folding Table \u2014 Large','1\u00d7'));
+  if(aHasSmTbl) acc.push(li('Pangean Folding Table \u2014 Small','1\u00d7'));
+  if(!aHasRoll&&!aHasLgTbl&&!aHasSmTbl&&aTableCt===1) acc.push(li('Pangean Folding Table \u2014 Large','1\u00d7'));
+  if(acc.length){
+    h.push('<div class="spec-section">'+hdr('Ellis Accessories'));
+    acc.forEach(a=>h.push(a));
+    h.push('</div>');
+  }
+  h.push('<div class="tagline">'+line.tag+'</div>');
+  document.getElementById('SPC').innerHTML=h.join('');
+}
+function init(){
+  const ln=document.getElementById('LN');
+  ln.innerHTML=Object.keys(T).map(k=>'<button class="nav-btn'+(k===curLine?' on':'')+'" data-l="'+k+'">'+T[k].name.replace('The ','').replace(' Tent','')+'</button>').join('');
+  ln.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>{curLine=b.dataset.l;curSI=0;curLI=0;buildSN();render();ln.querySelectorAll('.nav-btn').forEach(v=>v.classList.toggle('on',v.dataset.l===curLine))}));
+  buildSN();render();
+}
+function buildSN(){
+  const sn=document.getElementById('SN');
+  sn.innerHTML=T[curLine].sizes.map((s,i)=>'<button class="sz-btn'+(i===curSI?' on':'')+'" data-i="'+i+'">'+s.label+'</button>').join('');
+  sn.querySelectorAll('.sz-btn').forEach(b=>b.addEventListener('click',()=>{curSI=+b.dataset.i;curLI=0;render();sn.querySelectorAll('.sz-btn').forEach(v=>v.classList.toggle('on',+v.dataset.i===curSI))}));
+}
+window.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
