@@ -648,13 +648,6 @@ function buildSN(){
   sn.querySelectorAll('.sz-btn').forEach(b=>b.addEventListener('click',()=>{curSI=+b.dataset.i;curLI=0;render();sn.querySelectorAll('.sz-btn').forEach(v=>v.classList.toggle('on',+v.dataset.i===curSI))}));
 }
 window.addEventListener('DOMContentLoaded',init);
-// Tell parent iframe our full scroll height so it can size us correctly
-function reportHeight(){
-  var h=document.documentElement.scrollHeight;
-  window.parent.postMessage({ectHeight:h},'*');
-}
-window.addEventListener('load',reportHeight);
-window.addEventListener('resize',reportHeight);
 </script>
 </body>
 </html>
