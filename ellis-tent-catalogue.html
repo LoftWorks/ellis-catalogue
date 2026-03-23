@@ -648,6 +648,21 @@ function buildSN(){
   sn.querySelectorAll('.sz-btn').forEach(b=>b.addEventListener('click',()=>{curSI=+b.dataset.i;curLI=0;render();sn.querySelectorAll('.sz-btn').forEach(v=>v.classList.toggle('on',+v.dataset.i===curSI))}));
 }
 window.addEventListener('DOMContentLoaded',init);
+
+function fitCanvas(){
+  var panel=document.querySelector('.panel-draw');
+  var canvas=document.getElementById('C');
+  if(!panel||!canvas)return;
+  var maxH=panel.clientHeight-32; // subtract padding
+  canvas.style.width='';
+  canvas.style.height='';
+  if(canvas.offsetHeight>maxH){
+    canvas.style.height=maxH+'px';
+    canvas.style.width=maxH+'px'; // square canvas
+  }
+}
+window.addEventListener('load',fitCanvas);
+window.addEventListener('resize',fitCanvas);
 </script>
 </body>
 </html>
