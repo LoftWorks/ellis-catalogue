@@ -82,10 +82,7 @@ body{background:var(--site-bg);color:var(--site-fg);font-family:'Cormorant Garam
 .gear-item .k{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:rgba(44,32,21,.62);flex-shrink:0}
 .gear-item .v{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ink);text-align:right;font-weight:600;padding-left:16px}
 
-/* ── SPECS PANEL: TAGLINE ── */
-.tagline{margin-top:18px;padding:14px 0 0;border-top:1px solid var(--ink-ghost);font-family:'IM Fell English',serif;font-style:italic;font-size:17px;color:var(--ink-med);line-height:1.65;text-align:center}
-.book-ftr{text-align:center;padding:12px 0;border-top:1px solid var(--ink-ghost);margin-top:8px}
-.book-ftr p{font-family:'Special Elite',monospace;font-size:9px;letter-spacing:3px;color:var(--ink-light);text-transform:uppercase}
+
 
 /* ── MOBILE (<960px) ── */
 @media(max-width:960px){
@@ -113,6 +110,7 @@ body{background:var(--site-bg);color:var(--site-fg);font-family:'Cormorant Garam
 </head>
 <body>
 <header class="site-hdr">
+  <div class="title">Interior Configuration Guide</div>
   <div class="ctrl-strip">
     <span id="LN"></span>
     <span class="ctrl-div"></span>
@@ -130,7 +128,7 @@ body{background:var(--site-bg);color:var(--site-fg);font-family:'Cormorant Garam
     <div class="annot" id="DSC"></div>
     <div class="specs-rule"></div>
     <div class="specs" id="SPC"></div>
-    <div class="book-ftr"><p>Ellis Canvas Tents &middot; Durango, Colorado</p></div>
+
   </div>
 </div>
 
@@ -632,7 +630,6 @@ function updateUI(){
     acc.forEach(a=>h.push(a));
     h.push('</div>');
   }
-  h.push('<div class="tagline">'+line.tag+'</div>');
   document.getElementById('SPC').innerHTML=h.join('');
 }
 function init(){
