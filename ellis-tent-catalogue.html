@@ -376,6 +376,41 @@ function drawSTBase(x,FW,CD,AD,TD,PEAK,JH,sL,sW,fL,fW){
 
 // ═══════ TENT DATA ═══════
 const T={
+prairie:{name:'The Prairie Tent',tag:'The pyramid tent \u2014 no center pole, A-frame dormer, open floor plan. Light, lofty, and unobstructed.',
+sizes:[
+{key:'8\u00d78',label:"8\u2032 \u00d7 8\u2032",specs:{Floor:'57.5 sq ft (91\u2033 \u00d7 91\u2033)',Peak:'82\u2033','Stove Jack':'66\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:91,PEAK:82,JH:66,sL:15,sW:8,fL:16,fW:13.5,dim:'7 ft 7 in (91\u2033)',
+ layouts:[
+  {id:'A',title:'Solo + Stove',desc:'One 34″ Cowboy Bedroll along the left wall with a Nomad View stove.',sleeps:1,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawBR(x,tx+i2p(6),ty+(th-i2p(72))/2,i2p(31),i2p(72),'top',-Math.PI/2)}},
+  {id:'B',title:'Double Bedroll',desc:'Two 34″ Cowboy Bedrolls side by side, heads toward rear. No stove.',sleeps:2,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const gap=i2p((91-62)/3),brW=i2p(31),brL=i2p(72),brY=ty+th-brL-i2p(6);drawBR(x,tx+gap,brY,brW,brL,'bottom',-Math.PI/2);drawBR(x,tx+gap+brW+gap,brY,brW,brL,'bottom',-Math.PI/2)}}
+]},
+{key:'10\u00d710',label:"10\u2032 \u00d7 10\u2032",specs:{Floor:'90.25 sq ft (114\u2033 \u00d7 114\u2033)',Peak:'106\u2033','Stove Jack':'90\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:114,PEAK:106,JH:90,sL:15,sW:8,fL:16,fW:13.5,dim:'9 ft 6 in (114\u2033)',
+ layouts:[
+  {id:'A',title:'Cot + Lounge',desc:'One Heritage Cot along the rear, Butterfly Chair and Folding Table. With stove.',sleeps:1,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0);drawTable(x,tx+i2p(33),ty+i2p(26),i2p(20),i2p(20),'FOLDING','20\u2033\u00d720\u2033');drawChairS(x,tx+i2p(28),ty+i2p(58),20*Math.PI/180,s)}},
+  {id:'B',title:'Two Bedrolls',desc:'Two 34″ Cowboy Bedrolls \u2014 left wall and rear wall offset right. With stove.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawBR(x,tx+i2p(6),ty+i2p(6),i2p(31),i2p(72),'top',-Math.PI/2);drawBR(x,tx+(tw-i2p(72))/2+i2p(10),ty+th-i2p(31)-i2p(4),i2p(72),i2p(31),'left',0)}},
+  {id:'C',title:'Twin Cots',desc:'Two Heritage Cots along opposite sidewalls. No stove.',sleeps:2,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const ly=ty+(th-i2p(84))/2;drawCot(x,tx+i2p(10),ly,i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(10)-i2p(30),ly,i2p(30),i2p(84),Math.PI/2)}},
+  {id:'D',title:'Three Bedrolls',desc:'Three 34″ Cowboy Bedrolls side by side, heads toward rear. No stove \u2014 max capacity.',sleeps:3,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(4.5),startX=tx+i2p(6),brY=ty+th-brL-i2p(6);for(let i=0;i<3;i++)drawBR(x,startX+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
+  {id:'E',title:'Queen Mattress',desc:'One queen mattress along the rear wall, centered. Head toward the rear window.',sleeps:2,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const qx=tx+(tw-i2p(60))/2,qy=ty+th-i2p(80)-i2p(2),qw=i2p(60),qh=i2p(80);x.save();x.translate(qx+qw/2,qy+qh/2);x.scale(1,-1);drawQueen(x,-qw/2,-qh/2,qw,qh,0);x.restore()}}
+]},
+{key:'12\u00d712',label:"12\u2032 \u00d7 12\u2032",specs:{Floor:'132.25 sq ft (138\u2033 \u00d7 138\u2033)',Peak:'118\u2033','Stove Jack':'104\u2033',Stove:'Nomad View Large',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
+ FLOOR:138,PEAK:118,JH:104,sL:18.1,sW:9.8,fL:20,fW:18,dim:'11 ft 6 in (138\u2033)',
+ layouts:[
+  {id:'A',title:'L-Shape + Lounge',desc:'Two Heritage Cots in an L-shape, Butterfly Chair and Folding Table. With stove.',sleeps:2,stove:true,
+   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;drawCot(x,tx+i2p(6),ty+th-i2p(6)-i2p(30)-i2p(84),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+i2p(6)+i2p(30)+i2p(4),ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0);drawTable(x,tx+tw-i2p(42),ty+i2p(28),i2p(20),i2p(20),'FOLDING','20\u2033\u00d720\u2033');drawChairS(x,tx+tw-i2p(34),ty+i2p(60),-15*Math.PI/180,s)}},
+  {id:'B',title:'Three Cots',desc:'Three Heritage Cots \u2014 two sidewalls shifted forward, one along the rear. No stove.',sleeps:3,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawCot(x,tx+i2p(6),ty+i2p(9),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(6)-i2p(30),ty+i2p(9),i2p(30),i2p(84),Math.PI/2);drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0)}},
+  {id:'C',title:'Four Bedrolls',desc:'Four 34″ Cowboy Bedrolls side by side, heads toward rear. No stove.',sleeps:4,stove:false,
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(2.8),brY=ty+th-brL-i2p(6);for(let i=0;i<4;i++)drawBR(x,tx+gap+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
+]}]},
+
 shackleton:{name:'The Shackleton Tent',tag:'The classic wall tent, redefined. Built for the long camp, from elk season to basecamp.',
 sizes:[
 {key:'8\u00d78',label:"8\u2032 \u00d7 8\u2032",specs:{Floor:'66.69 sq ft (96\u2033 \u00d7 96\u2033)',Peak:'96\u2033',Corner:'24\u2033','Stove Jack':'84\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
@@ -420,41 +455,6 @@ sizes:[
    const rpt=(ox,oy)=>({cx:tCX+ox*Math.cos(tR)-oy*Math.sin(tR),cy:tCY+ox*Math.sin(tR)+oy*Math.cos(tR)});
    const cL=rpt(-i2p(21)-i2p(16),0),cR=rpt(i2p(21)+i2p(16),0),cT=rpt(0,-i2p(14)-i2p(16)),cB=rpt(0,i2p(14)+i2p(16));
    drawChairS(x,cL.cx,cL.cy,Math.PI/2+tR,s);drawChairS(x,cR.cx,cR.cy,Math.PI/2+tR,s);drawChairS(x,cT.cx,cT.cy,tR,s);drawChairS(x,cB.cx,cB.cy,tR,s)}}
-]}]},
-
-prairie:{name:'The Prairie Tent',tag:'The pyramid tent \u2014 no center pole, A-frame dormer, open floor plan. Light, lofty, and unobstructed.',
-sizes:[
-{key:'8\u00d78',label:"8\u2032 \u00d7 8\u2032",specs:{Floor:'57.5 sq ft (91\u2033 \u00d7 91\u2033)',Peak:'82\u2033','Stove Jack':'66\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
- FLOOR:91,PEAK:82,JH:66,sL:15,sW:8,fL:16,fW:13.5,dim:'7 ft 7 in (91\u2033)',
- layouts:[
-  {id:'A',title:'Solo + Stove',desc:'One 34″ Cowboy Bedroll along the left wall with a Nomad View stove.',sleeps:1,stove:true,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawBR(x,tx+i2p(6),ty+(th-i2p(72))/2,i2p(31),i2p(72),'top',-Math.PI/2)}},
-  {id:'B',title:'Double Bedroll',desc:'Two 34″ Cowboy Bedrolls side by side, heads toward rear. No stove.',sleeps:2,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;const gap=i2p((91-62)/3),brW=i2p(31),brL=i2p(72),brY=ty+th-brL-i2p(6);drawBR(x,tx+gap,brY,brW,brL,'bottom',-Math.PI/2);drawBR(x,tx+gap+brW+gap,brY,brW,brL,'bottom',-Math.PI/2)}}
-]},
-{key:'10\u00d710',label:"10\u2032 \u00d7 10\u2032",specs:{Floor:'90.25 sq ft (114\u2033 \u00d7 114\u2033)',Peak:'106\u2033','Stove Jack':'90\u2033',Stove:'Nomad View Medium',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
- FLOOR:114,PEAK:106,JH:90,sL:15,sW:8,fL:16,fW:13.5,dim:'9 ft 6 in (114\u2033)',
- layouts:[
-  {id:'A',title:'Cot + Lounge',desc:'One Heritage Cot along the rear, Butterfly Chair and Folding Table. With stove.',sleeps:1,stove:true,
-   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0);drawTable(x,tx+i2p(33),ty+i2p(26),i2p(20),i2p(20),'FOLDING','20\u2033\u00d720\u2033');drawChairS(x,tx+i2p(28),ty+i2p(58),20*Math.PI/180,s)}},
-  {id:'B',title:'Two Bedrolls',desc:'Two 34″ Cowboy Bedrolls \u2014 left wall and rear wall offset right. With stove.',sleeps:2,stove:true,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawBR(x,tx+i2p(6),ty+i2p(6),i2p(31),i2p(72),'top',-Math.PI/2);drawBR(x,tx+(tw-i2p(72))/2+i2p(10),ty+th-i2p(31)-i2p(4),i2p(72),i2p(31),'left',0)}},
-  {id:'C',title:'Twin Cots',desc:'Two Heritage Cots along opposite sidewalls. No stove.',sleeps:2,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;const ly=ty+(th-i2p(84))/2;drawCot(x,tx+i2p(10),ly,i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(10)-i2p(30),ly,i2p(30),i2p(84),Math.PI/2)}},
-  {id:'D',title:'Three Bedrolls',desc:'Three 34″ Cowboy Bedrolls side by side, heads toward rear. No stove \u2014 max capacity.',sleeps:3,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(4.5),startX=tx+i2p(6),brY=ty+th-brL-i2p(6);for(let i=0;i<3;i++)drawBR(x,startX+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
-  {id:'E',title:'Queen Mattress',desc:'One queen mattress along the rear wall, centered. Head toward the rear window.',sleeps:2,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;const qx=tx+(tw-i2p(60))/2,qy=ty+th-i2p(80)-i2p(2),qw=i2p(60),qh=i2p(80);x.save();x.translate(qx+qw/2,qy+qh/2);x.scale(1,-1);drawQueen(x,-qw/2,-qh/2,qw,qh,0);x.restore()}}
-]},
-{key:'12\u00d712',label:"12\u2032 \u00d7 12\u2032",specs:{Floor:'132.25 sq ft (138\u2033 \u00d7 138\u2033)',Peak:'118\u2033','Stove Jack':'104\u2033',Stove:'Nomad View Large',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
- FLOOR:138,PEAK:118,JH:104,sL:18.1,sW:9.8,fL:20,fW:18,dim:'11 ft 6 in (138\u2033)',
- layouts:[
-  {id:'A',title:'L-Shape + Lounge',desc:'Two Heritage Cots in an L-shape, Butterfly Chair and Folding Table. With stove.',sleeps:2,stove:true,
-   draw(x,b){const{tx,ty,tw,th,i2p,s}=b;drawCot(x,tx+i2p(6),ty+th-i2p(6)-i2p(30)-i2p(84),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+i2p(6)+i2p(30)+i2p(4),ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0);drawTable(x,tx+tw-i2p(42),ty+i2p(28),i2p(20),i2p(20),'FOLDING','20\u2033\u00d720\u2033');drawChairS(x,tx+tw-i2p(34),ty+i2p(60),-15*Math.PI/180,s)}},
-  {id:'B',title:'Three Cots',desc:'Three Heritage Cots \u2014 two sidewalls shifted forward, one along the rear. No stove.',sleeps:3,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;drawCot(x,tx+i2p(6),ty+i2p(9),i2p(30),i2p(84),-Math.PI/2);drawCot(x,tx+tw-i2p(6)-i2p(30),ty+i2p(9),i2p(30),i2p(84),Math.PI/2);drawCot(x,tx+(tw-i2p(84))/2,ty+th-i2p(30)-i2p(6),i2p(84),i2p(30),0)}},
-  {id:'C',title:'Four Bedrolls',desc:'Four 34″ Cowboy Bedrolls side by side, heads toward rear. No stove.',sleeps:4,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(2.8),brY=ty+th-brL-i2p(6);for(let i=0;i<4;i++)drawBR(x,tx+gap+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
 ]}]},
 
 'split-torrent':{name:'The Split-Torrent Tent',tag:'Dual-zone \u2014 enclosed cabin for sleeping, open awning veranda for living. The expedition basecamp.',
@@ -528,7 +528,7 @@ sizes:[
 };
 
 // ═══════ UI ═══════
-let curLine='shackleton',curSI=0,curLI=0;
+let curLine='prairie',curSI=0,curLI=0;
 function render(){
   const line=T[curLine],sz=line.sizes[curSI],layout=sz.layouts[curLI],x=mkCtx();let base;
   if(curLine==='shackleton')base=drawShackletonBase(x,sz.FLOOR,sz.PEAK,sz.CH,sz.JH,sz.dW,sz.cO,sz.wW,sz.sL,sz.sW,sz.fL,sz.fW,sz.dim);
@@ -548,18 +548,18 @@ function updateUI(){
   // Data
   const TD={
     'shackleton':{
-      '8\u00d78':{bt:{pw:'44 lbs 2 oz',pd:'12\u2033\u00d712\u2033\u00d734\u2033',shell:'32 lbs 11 oz'},rf:{pw:'44 lbs 5 oz',pd:'14\u2033\u00d712\u2033\u00d735\u2033',shell:'26 lbs 3 oz',floor:'6 lbs 10 oz'},poles:'5 lbs 1 oz',spikes:'4 lbs 2 oz',fa:'66.69 sq ft',peak:'96\u2033',corner:'24\u2033',jh:'84\u2033',sp:16,stv:'Medium'},
-      '11\u00d711':{bt:{pw:'57 lbs 5 oz',pd:'14\u2033\u00d710\u2033\u00d740\u2033',shell:'45 lbs 9 oz'},rf:{pw:'58 lbs',pd:'14\u2033\u00d710\u2033\u00d740\u2033',shell:'35 lbs 14 oz',floor:'9 lbs 11 oz'},poles:'5 lbs 9 oz',spikes:'4 lbs 2 oz',fa:'118.81 sq ft',peak:'108\u2033',corner:'24\u2033',jh:'94\u2033',sp:16,stv:'Large'},
-      '14\u00d714':{bt:{pw:'77 lbs 8 oz',pd:'14\u2033\u00d714\u2033\u00d742\u2033',shell:'63 lbs'},rf:{pw:'79 lbs',pd:'12\u2033\u00d715\u2033\u00d742\u2033',shell:'47 lbs 11 oz',floor:'17 lbs 1 oz'},poles:'6 lbs 4 oz',spikes:'4 lbs 2 oz',fa:'203 sq ft',peak:'120\u2033',corner:'24\u2033',jh:'105\u2033',sp:16,stv:'Large'}
+      '8\u00d78':{bt:{pw:'44 lbs 2 oz',pd:'12\u2033\u00d712\u2033\u00d734\u2033',shell:'32 lbs 11 oz',fa:'66.69 sq ft'},rf:{pw:'44 lbs 5 oz',pd:'14\u2033\u00d712\u2033\u00d735\u2033',shell:'26 lbs 3 oz',floor:'6 lbs 10 oz',fa:'65.34 sq ft'},poles:'5 lbs 1 oz',spikes:'4 lbs 2 oz',peak:'96\u2033',corner:'24\u2033',jh:'84\u2033',sp:16,stv:'Medium'},
+      '11\u00d711':{bt:{pw:'57 lbs 5 oz',pd:'14\u2033\u00d710\u2033\u00d740\u2033',shell:'45 lbs 9 oz',fa:'118.81 sq ft'},rf:{pw:'58 lbs',pd:'14\u2033\u00d710\u2033\u00d740\u2033',shell:'35 lbs 14 oz',floor:'9 lbs 11 oz',fa:'118 sq ft'},poles:'5 lbs 9 oz',spikes:'4 lbs 2 oz',peak:'108\u2033',corner:'24\u2033',jh:'94\u2033',sp:16,stv:'Large'},
+      '14\u00d714':{bt:{pw:'77 lbs 8 oz',pd:'14\u2033\u00d714\u2033\u00d742\u2033',shell:'63 lbs',fa:'203 sq ft'},rf:{pw:'79 lbs',pd:'12\u2033\u00d715\u2033\u00d742\u2033',shell:'47 lbs 11 oz',floor:'17 lbs 1 oz',fa:'202 sq ft'},poles:'6 lbs 4 oz',spikes:'4 lbs 2 oz',peak:'120\u2033',corner:'24\u2033',jh:'105\u2033',sp:16,stv:'Large'}
     },
     'prairie':{
-      '8\u00d78':{pw:'38 lbs',pd:'12\u2033\u00d712\u2033\u00d730\u2033',fa:'57.5 sq ft',peak:'82\u2033',jh:'66\u2033',sp:12,stv:'Medium'},
-      '10\u00d710':{pw:'47 lbs',pd:'12\u2033\u00d712\u2033\u00d735\u2033',fa:'90.25 sq ft',peak:'106\u2033',jh:'90\u2033',sp:12,stv:'Medium'},
-      '12\u00d712':{pw:'60 lbs',pd:'14\u2033\u00d712\u2033\u00d738\u2033',fa:'132.25 sq ft',peak:'118\u2033',jh:'104\u2033',sp:12,stv:'Large'}
+      '8\u00d78':{pw:'30 lbs 6 oz',pd:'12\u2033\u00d78\u2033\u00d731\u2033',shell:'19 lbs 10 oz',poles:'7 lbs 6 oz',spikes:'1 lb 10 oz',fa:'57.5 sq ft',peak:'82\u2033',jh:'66\u2033',sp:6,stv:'Medium'},
+      '10\u00d710':{pw:'42 lbs 11 oz',pd:'14\u2033\u00d710\u2033\u00d735\u2033',shell:'29 lbs 1 oz',poles:'9 lbs 12 oz',spikes:'1 lb 9 oz',fa:'90.25 sq ft',peak:'106\u2033',jh:'90\u2033',sp:6,stv:'Medium'},
+      '12\u00d712':{pw:'53 lbs',pd:'14\u2033\u00d79\u2033\u00d742\u2033',shell:'38 lbs 2 oz',poles:'10 lbs 13 oz',spikes:'1 lb 9 oz',fa:'132.25 sq ft',peak:'118\u2033',jh:'104\u2033',sp:6,stv:'Large'}
     },
     'split-torrent':{
-      '8\u00d711':{pw:'48 lbs',pd:'14\u2033\u00d78\u2033\u00d738\u2033',fa:'45.4 sq ft cabin + 48.1 sq ft awning',peak:'96\u2033',jh:'84\u2033 (awning)',sp:16,stv:'Medium'},
-      '11\u00d714':{pw:'66 lbs',pd:'15\u2033\u00d712\u2033\u00d740\u2033',fa:'76.1 sq ft cabin + 87 sq ft awning',peak:'108\u2033',jh:'94\u2033 (awning + cabin)',sp:16,stv:'Large'}
+      '8\u00d711':{pw:'48 lbs',pd:'14\u2033\u00d78\u2033\u00d738\u2033',awnMat:'4 lbs 10 oz',poles:'5 lbs 6 oz',spikes:'4 lbs 3 oz',fa:'45.4 sq ft cabin + 48.1 sq ft awning',peak:'96\u2033',jh:'84\u2033 (awning)',sp:16,stv:'Medium'},
+      '11\u00d714':{pw:'66 lbs',pd:'15\u2033\u00d712\u2033\u00d740\u2033',awnMat:'8 lbs 3 oz',poles:'5 lbs 8 oz',spikes:'4 lbs 1 oz',fa:'76.1 sq ft cabin + 87 sq ft awning',peak:'108\u2033',jh:'94\u2033 (awning + cabin)',sp:16,stv:'Large'}
     }
   };
   const td=TD[curLine]&&TD[curLine][sz.key]||{};
@@ -573,30 +573,35 @@ function updateUI(){
     h.push(sl('Packed Weight',td.bt.pw));
     h.push(sl('Packed Size',td.bt.pd));
     h.push(sl('Shell Weight',td.bt.shell));
+    h.push(sl('Floor Area',td.bt.fa));
     h.push('</div><div class="spec-col">');
     h.push('<div class="col-title">Removable Floor</div>');
     h.push(sl('Packed Weight',td.rf.pw));
     h.push(sl('Packed Size',td.rf.pd));
     h.push(sl('Shell Weight',td.rf.shell));
     h.push(sl('Floor Weight',td.rf.floor));
+    h.push(sl('Floor Area',td.rf.fa));
     h.push('</div></div>');
-    h.push(li('Floor Area',td.fa));
     h.push(li('Peak Height',td.peak));
     h.push(li('Corner Height',td.corner));
+    h.push(li('Stove Jack Height',td.jh));
     h.push(li('Pole Weight',td.poles));
     h.push(li('Spike Weight',td.spikes));
     h.push(li('Spikes',td.sp+' aluminum'));
     h.push(li('Shell','7 oz Sunforger canvas'));
-    h.push(li('Structure',sp.Structure||''));
   }else{
     h.push('<div class="gear-list">');
-    h.push(li('Floor Area',td.fa||''));
-    h.push(li('Peak Height',td.peak||''));
     h.push(li('Packed Weight',td.pw||''));
     h.push(li('Packed Size',td.pd||''));
+    h.push(li('Floor Area',td.fa||''));
+    h.push(li('Peak Height',td.peak||''));
+    if(td.jh) h.push(li('Stove Jack Height',td.jh));
+    if(td.shell) h.push(li('Shell Weight',td.shell));
+    if(td.poles) h.push(li('Pole Weight',td.poles));
+    if(td.spikes) h.push(li('Spike Weight',td.spikes));
+    if(td.awnMat) h.push(li('Awning Mat Weight',td.awnMat));
     h.push(li('Spikes',(td.sp||'')+' aluminum'));
     h.push(li('Shell','7 oz Sunforger canvas'));
-    h.push(li('Structure',sp.Structure||''));
     h.push('</div>');
   }
   h.push('</div>');
