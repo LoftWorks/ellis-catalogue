@@ -169,7 +169,7 @@ function drawCot(x,px,py,w,h,lr,lt){
   x.restore();
 }
 
-function drawQueen(x,px,py,w,h,lr){
+function drawQueen(x,px,py,w,h,lr,pillowEnd){
   // Fill + border
   x.fillStyle=cotFl;x.fillRect(px,py,w,h);hr(x,px,py,w,h,ink,1.8);
   // Ticking lines across the width
@@ -180,9 +180,10 @@ function drawQueen(x,px,py,w,h,lr){
   const pL=Math.min(w,h)*.14,pW=(Math.max(w,h)*.44);
   x.fillStyle='rgba(160,130,75,0.06)';x.strokeStyle=inkM;x.lineWidth=.9;
   if(h>w){
-    // vertical — pillows at top
-    x.fillRect(px+4,py+4,w/2-6,pL);x.strokeRect(px+4,py+4,w/2-6,pL);
-    x.fillRect(px+w/2+2,py+4,w/2-6,pL);x.strokeRect(px+w/2+2,py+4,w/2-6,pL);
+    // vertical — pillows at top or bottom
+    const pY=pillowEnd==='bottom'?py+h-4-pL:py+4;
+    x.fillRect(px+4,pY,w/2-6,pL);x.strokeRect(px+4,pY,w/2-6,pL);
+    x.fillRect(px+w/2+2,pY,w/2-6,pL);x.strokeRect(px+w/2+2,pY,w/2-6,pL);
   } else {
     // horizontal — pillows at left
     x.fillRect(px+4,py+4,pL,h/2-6);x.strokeRect(px+4,py+4,pL,h/2-6);
@@ -398,7 +399,7 @@ sizes:[
   {id:'D',title:'Three Bedrolls',desc:'Three 34″ Cowboy Bedrolls side by side, heads toward rear. No stove \u2014 max capacity.',sleeps:3,stove:false,
    draw(x,b){const{tx,ty,tw,th,i2p}=b;const brW=i2p(31),brL=i2p(72),gap=i2p(4.5),startX=tx+i2p(6),brY=ty+th-brL-i2p(6);for(let i=0;i<3;i++)drawBR(x,startX+i*(brW+gap),brY,brW,brL,'bottom',-Math.PI/2)}},
   {id:'E',title:'Queen Mattress',desc:'One queen mattress along the rear wall, centered. Head toward the rear window.',sleeps:2,stove:false,
-   draw(x,b){const{tx,ty,tw,th,i2p}=b;const qx=tx+(tw-i2p(60))/2,qy=ty+th-i2p(80)-i2p(2),qw=i2p(60),qh=i2p(80);x.save();x.translate(qx+qw/2,qy+qh/2);x.scale(1,-1);drawQueen(x,-qw/2,-qh/2,qw,qh,0);x.restore()}}
+   draw(x,b){const{tx,ty,tw,th,i2p}=b;const qx=tx+(tw-i2p(60))/2,qy=ty+th-i2p(80)-i2p(2),qw=i2p(60),qh=i2p(80);drawQueen(x,qx,qy,qw,qh,0,'bottom')}}
 ]},
 {key:'12\u00d712',label:"12\u2032 \u00d7 12\u2032",specs:{Floor:'132.25 sq ft (138\u2033 \u00d7 138\u2033)',Peak:'118\u2033','Stove Jack':'104\u2033',Stove:'Nomad View Large',Shell:'7 oz Sunforger',Structure:'Domestic 6061 drawn, seamless aluminum with slip fits'},
  FLOOR:138,PEAK:118,JH:104,sL:18.1,sW:9.8,fL:20,fW:18,dim:'11 ft 6 in (138\u2033)',
